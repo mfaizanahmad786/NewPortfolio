@@ -8,14 +8,22 @@ import { CloseIcon, DotsIcon } from "./Icons";
 
 const linkSpring = { type: "spring" as const, bounce: 0.2, duration: 0.8 };
 
+const menu = [
+  { label: "About Me", href: "/#bio-section" },
+  { label: "Services", href: "/#services" },
+  { label: "Projects", href: "/work" },
+  { label: "Contact", href: "/#contact" },
+];
+
 export function Nav() {
   const [open, setOpen] = useState(false);
 
   return (
     <motion.div
-      className="pointer-events-none fixed left-1/2 top-[30px] z-50 w-[min(320px,calc(100%-28px))] -translate-x-1/2"
-      initial={{ opacity: 0.001, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
+      className="pointer-events-none fixed top-[30px] z-50 w-[min(320px,calc(100%-40px))]"
+      style={{ left: "50%" }}
+      initial={{ opacity: 0.001, y: 10, x: "-50%" }}
+      animate={{ opacity: 1, y: 0, x: "-50%" }}
       transition={{ type: "spring", bounce: 0, duration: 1.6, delay: 1.4 }}
     >
       <nav className="pointer-events-auto overflow-hidden rounded-[20px] bg-ink text-cream">
@@ -46,7 +54,7 @@ export function Nav() {
               transition={{ type: "spring", bounce: 0, duration: 0.8 }}
               className="flex flex-col gap-2.5 overflow-hidden px-4 pb-6 pt-4"
             >
-              {site.nav.map((item, index) => (
+              {menu.map((item, index) => (
                 <motion.li
                   key={item.href}
                   initial={{ opacity: 0.001, x: -20 }}
@@ -57,7 +65,7 @@ export function Nav() {
                   <Link
                     href={item.href}
                     onClick={() => setOpen(false)}
-                    className="block py-1 text-[18px] tracking-[-0.03em] text-cream/90 transition-colors hover:text-cream"
+                    className="inline-flex rounded-[8px] bg-cream px-3 py-1.5 text-[15px] tracking-[-0.03em] text-ink transition-colors hover:bg-white"
                   >
                     {item.label}
                   </Link>

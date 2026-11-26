@@ -86,23 +86,24 @@ function PortraitFaces({
 
 function ScrollPortrait() {
   const { scrollY } = useScroll();
-  const progress = useTransform(scrollY, [0, 1100], [0, 1]);
+  const progress = useTransform(scrollY, (value) => {
+    const vh = typeof window === "undefined" ? 900 : window.innerHeight;
+    return Math.min(1, Math.max(0, value / vh));
+  });
   const scale = useTransform(progress, [0, 1], [0.5, 1]);
   const y = useTransform(progress, [0, 1], [114, 0]);
   const rotateFront = useTransform(progress, [0, 1], [0, 180]);
   const rotateBack = useTransform(progress, [0, 1], [180, 360]);
 
   return (
-    <div className="pointer-events-none absolute inset-0 z-20 hidden min-[1280px]:block">
-      <div className="sticky top-[47.1vh] mt-[47.1vh] flex justify-center">
-        <PortraitFaces
-          rotateFront={rotateFront}
-          rotateBack={rotateBack}
-          scale={scale}
-          y={y}
-          className="relative h-[456px] w-[400px]"
-        />
-      </div>
+    <div className="pointer-events-none sticky top-0 z-20 flex h-screen items-end justify-center pb-5">
+      <PortraitFaces
+        rotateFront={rotateFront}
+        rotateBack={rotateBack}
+        scale={scale}
+        y={y}
+        className="relative h-[456px] w-[400px]"
+      />
     </div>
   );
 }
@@ -131,13 +132,74 @@ function MountPortrait() {
 }
 
 export function HomePage({ featured, thoughts }: { featured: Project[]; thoughts: Post[] }) {
-  const wrap = useRef<HTMLDivElement>(null);
+  const stage = useRef<HTMLDivElement>(null);
   const [sent, setSent] = useState(false);
 
   return (
     <main>
-      <div ref={wrap} className="relative">
-        <section id="hero-section" className="relative mx-auto flex min-h-[100svh] w-full max-w-page flex-col px-5 pb-10 pt-[200px] min-[810px]:px-12 min-[810px]:pt-28 min-[1280px]:px-0">
+      <div ref={stage} className="relative hidden h-[200vh] min-[1280px]:block">
+        <ScrollPortrait />
+        <div className="absolute inset-0">
+          <section id="hero-section" className="mx-auto flex h-screen w-full max-w-[1180px] flex-col px-0 pb-10 pt-[293px]">
+            <div className="relative w-full">
+              <motion.img
+                src={site.hero.star}
+                alt=""
+                initial={{ opacity: 0.001, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ type: "spring", bounce: 0, duration: 1.6, delay: 1.4 }}
+                className="pointer-events-none absolute -left-4 -top-14 w-[140px]"
+              />
+              <motion.img
+                src={site.hero.bolt}
+                alt=""
+                initial={{ opacity: 0.001, y: 10, rotate: 0 }}
+                animate={{ opacity: 1, y: 0, rotate: 16 }}
+                transition={{ type: "spring", bounce: 0, duration: 1.6, delay: 1.4 }}
+                className="pointer-events-none absolute -right-8 bottom-[-18px] w-[170px]"
+              />
+              <h1 className="text-center text-[174px] font-extrabold leading-[0.9] tracking-[-0.02em] text-ink">
+                <BlurWords text={site.hero.title[0]} trigger="mount" blur={2} duration={2.8} delay={0.25} />
+                <br />
+                <BlurWords text={site.hero.title[1]} trigger="mount" blur={2} duration={2.8} delay={0.4} />
+              </h1>
+            </div>
+            <div className="mt-auto flex items-end justify-between pt-8">
+              <p className="text-[68px] font-semibold leading-none tracking-[-0.02em]">{site.hero.year}</p>
+              <p className="mr-36 text-[18px] tracking-[-0.04em]">{site.hero.since}</p>
+            </div>
+          </section>
+          <section id="bio-section" className="mx-auto h-screen w-full max-w-[1180px]">
+            <div className="grid grid-cols-[1fr_400px_1fr] items-start gap-8" style={{ marginTop: "calc(100vh - 476px)" }}>
+              <div className="flex h-[456px] flex-col justify-between">
+                <BlurWords
+                  as="h2"
+                  text={site.bio.heading}
+                  blur={10}
+                  className="text-[76px] font-semibold leading-none tracking-[-0.02em]"
+                />
+                <p className="max-w-[340px] text-[22px] font-semibold leading-[1.4] tracking-[-0.04em]">{site.bio.lead}</p>
+              </div>
+              <div className="h-[456px]" aria-hidden />
+              <div className="flex h-[456px] max-w-[360px] flex-col justify-self-end pt-[240px]">
+                {site.bio.paragraphs.map((p) => (
+                  <p key={p} className="mb-5 text-[18px] leading-[1.4] tracking-[-0.04em]">
+                    {p}
+                  </p>
+                ))}
+                <div className="mt-2">
+                  <ArrowLink href={site.getStartedHref} external>
+                    {site.bio.cta}
+                  </ArrowLink>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <div className="min-[1280px]:hidden">
+        <section id="hero-section" className="relative mx-auto flex min-h-[100svh] w-full max-w-page flex-col px-5 pb-10 pt-[200px] min-[810px]:px-12 min-[810px]:pt-28">
           <div className="relative mx-auto mt-8 w-full max-w-[1180px] min-[810px]:mt-10 min-[1280px]:mt-[181px]">
             <motion.img
               src={site.hero.star}
@@ -174,9 +236,7 @@ export function HomePage({ featured, thoughts }: { featured: Project[]; thoughts
           </div>
         </section>
 
-        <ScrollPortrait />
-
-        <section id="bio-section" className="mx-auto flex min-h-[100svh] w-full max-w-page flex-col justify-center px-5 py-24 min-[810px]:px-12 min-[1280px]:px-0">
+        <section id="bio-section" className="mx-auto flex min-h-[100svh] w-full max-w-page flex-col justify-center px-5 py-24 min-[810px]:px-12">
           <div className="grid items-center gap-10 min-[1280px]:grid-cols-[1fr_400px_1fr] min-[1280px]:gap-8">
             <div>
               <BlurWords
