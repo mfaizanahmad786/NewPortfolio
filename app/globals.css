@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --cream: #faf7f3;
+  --ink: #111111;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--font-archivo), Archivo, sans-serif;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: #111;
+  color: #faf7f3;
+}
+
+input,
+textarea,
+button {
+  font-family: inherit;
+}
+
+/* Hide scrollbars on horizontal strips without losing scroll. */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  scrollbar-width: none;
+}
