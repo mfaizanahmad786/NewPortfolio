@@ -4,6 +4,7 @@ import { site } from "@/data/site";
 import { Chrome } from "@/components/Chrome";
 import { Footer } from "@/components/Footer";
 import { Nav } from "@/components/Nav";
+import { SmoothScroll } from "@/components/SmoothScroll";
 import "./globals.css";
 
 // Self-hosted latin variable Archivo (weights 300–900). next/font/google on
@@ -33,6 +34,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={archivo.variable}>
       <body className="bg-cream font-sans text-ink antialiased">
+        <SmoothScroll />
         <Nav />
         {children}
         <Footer />

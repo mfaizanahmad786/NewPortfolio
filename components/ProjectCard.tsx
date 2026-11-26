@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 export function ProjectCard({
   href,
@@ -14,6 +17,12 @@ export function ProjectCard({
   imageClass?: string;
 }) {
   return (
+    <motion.div
+      initial={{ opacity: 0.001, y: 10, filter: "blur(6px)" }}
+      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      viewport={{ once: true, amount: 0.35 }}
+      transition={{ type: "spring", bounce: 0, duration: 1.4 }}
+    >
     <Link href={href} className="group block">
       <div className={`overflow-hidden rounded-card bg-[#ece8e2] ${imageClass}`}>
         <img
@@ -27,5 +36,6 @@ export function ProjectCard({
       </h3>
       <p className="mt-0.5 text-[16px] leading-[1.4] tracking-[-0.04em] text-ink">{subtitle}</p>
     </Link>
+    </motion.div>
   );
 }

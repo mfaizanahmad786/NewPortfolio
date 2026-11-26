@@ -5,16 +5,16 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { site } from "@/data/site";
 import type { Post, Project } from "@/lib/content";
 import { ArrowLink } from "./ArrowLink";
+import { BlurWords } from "./BlurWords";
 import { PostCard } from "./PostCard";
 import { ProjectCard } from "./ProjectCard";
-import { Reveal } from "./Reveal";
 import { SocialIcon } from "./Icons";
 
 function QuoteWords() {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start 80%", "end 35%"],
+    offset: ["start 90%", "start 10%"],
   });
   const words = site.quote.split(" ");
 
@@ -44,7 +44,7 @@ function Word({
 }) {
   const start = index / total;
   const end = Math.min(1, start + 1.15 / total);
-  const color = useTransform(progress, [start, end], ["rgba(17,17,17,0.22)", "rgb(17,17,17)"]);
+  const color = useTransform(progress, [start, end], ["#999999", "#111111"]);
   return (
     <motion.span style={{ color }} className="inline">
       {word}
@@ -53,25 +53,79 @@ function Word({
   );
 }
 
-function Portrait({ wrap }: { wrap: React.RefObject<HTMLDivElement | null> }) {
-  const { scrollYProgress } = useScroll({
-    target: wrap,
-    offset: ["start start", "end end"],
-  });
-  const width = useTransform(scrollYProgress, [0, 0.34], [200, 360]);
-  const height = useTransform(scrollYProgress, [0, 0.34], [228, 470]);
-  const gray = useTransform(scrollYProgress, [0.05, 0.22], [1, 0]);
-  const filter = useTransform(gray, (g) => `grayscale(${g})`);
-  const opacity = useTransform(scrollYProgress, [0.58, 0.72], [1, 0]);
+function PortraitFaces({
+  rotateFront,
+  rotateBack,
+  scale,
+  y,
+  className,
+}: {
+  rotateFront: number | ReturnType<typeof useTransform<number, number>>;
+  rotateBack: number | ReturnType<typeof useTransform<number, number>>;
+  scale?: number | ReturnType<typeof useTransform<number, number>>;
+  y?: number | ReturnType<typeof useTransform<number, number>>;
+  className: string;
+}) {
+  return (
+    <div className={className} style={{ perspective: 1200 }}>
+      <motion.div
+        style={{ rotateY: rotateBack, scale, y }}
+        className="absolute inset-0 overflow-hidden rounded-[20px] [backface-visibility:hidden] [transform-style:preserve-3d]"
+      >
+        <img src={site.hero.portrait} alt="" className="h-full w-full object-cover" />
+      </motion.div>
+      <motion.div
+        style={{ rotateY: rotateFront, scale, y, filter: "grayscale(1)" }}
+        className="absolute inset-0 overflow-hidden rounded-[20px] [backface-visibility:hidden] [transform-style:preserve-3d]"
+      >
+        <img src={site.hero.portrait} alt="Portrait of Majd" className="h-full w-full object-cover" />
+      </motion.div>
+    </div>
+  );
+}
+
+function ScrollPortrait() {
+  const { scrollY } = useScroll();
+  const progress = useTransform(scrollY, [0, 1100], [0, 1]);
+  const scale = useTransform(progress, [0, 1], [0.5, 1]);
+  const y = useTransform(progress, [0, 1], [114, 0]);
+  const rotateFront = useTransform(progress, [0, 1], [0, 180]);
+  const rotateBack = useTransform(progress, [0, 1], [180, 360]);
 
   return (
-    <div className="pointer-events-none sticky top-[24vh] z-20 -mt-[38vh] mb-[-10vh] hidden h-[520px] items-start justify-center min-[1280px]:flex">
-      <motion.img
-        src={site.hero.portrait}
-        alt="Portrait of Majd"
-        style={{ width, height, filter, opacity }}
-        className="rounded-[20px] object-cover"
-      />
+    <div className="pointer-events-none absolute inset-0 z-20 hidden min-[1280px]:block">
+      <div className="sticky top-[47.1vh] mt-[47.1vh] flex justify-center">
+        <PortraitFaces
+          rotateFront={rotateFront}
+          rotateBack={rotateBack}
+          scale={scale}
+          y={y}
+          className="relative h-[456px] w-[400px]"
+        />
+      </div>
+    </div>
+  );
+}
+
+function MountPortrait() {
+  return (
+    <div className="relative mx-auto h-[220px] w-[196px] min-[810px]:h-[250px] min-[810px]:w-[220px]" style={{ perspective: 1200 }}>
+      <motion.div
+        className="absolute inset-0 overflow-hidden rounded-[20px] [backface-visibility:hidden]"
+        initial={{ rotateY: -180 }}
+        animate={{ rotateY: 0 }}
+        transition={{ type: "spring", bounce: 0, duration: 1.6, delay: 2 }}
+      >
+        <img src={site.hero.portrait} alt="" className="h-full w-full object-cover" />
+      </motion.div>
+      <motion.div
+        className="absolute inset-0 overflow-hidden rounded-[20px] grayscale [backface-visibility:hidden]"
+        initial={{ rotateY: 0 }}
+        animate={{ rotateY: 180 }}
+        transition={{ type: "spring", bounce: 0, duration: 1.6, delay: 2 }}
+      >
+        <img src={site.hero.portrait} alt="Portrait of Majd" className="h-full w-full object-cover" />
+      </motion.div>
     </div>
   );
 }
@@ -82,32 +136,34 @@ export function HomePage({ featured, thoughts }: { featured: Project[]; thoughts
 
   return (
     <main>
-      <div ref={wrap}>
+      <div ref={wrap} className="relative">
         <section id="hero-section" className="relative mx-auto flex min-h-[100svh] w-full max-w-page flex-col px-5 pb-10 pt-[200px] min-[810px]:px-12 min-[810px]:pt-28 min-[1280px]:px-0">
-          <div className="relative mx-auto mt-6 w-full max-w-[1180px] min-[1280px]:mt-10">
-            <img
+          <div className="relative mx-auto mt-8 w-full max-w-[1180px] min-[810px]:mt-10 min-[1280px]:mt-[181px]">
+            <motion.img
               src={site.hero.star}
               alt=""
+              initial={{ opacity: 0.001, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ type: "spring", bounce: 0, duration: 1.6, delay: 1.4 }}
               className="pointer-events-none absolute -left-2 -top-8 w-[78px] min-[810px]:-left-2 min-[810px]:-top-10 min-[810px]:w-[110px] min-[1280px]:-left-4 min-[1280px]:-top-14 min-[1280px]:w-[140px]"
             />
-            <img
+            <motion.img
               src={site.hero.bolt}
               alt=""
+              initial={{ opacity: 0.001, y: 10, rotate: 0 }}
+              animate={{ opacity: 1, y: 0, rotate: 16 }}
+              transition={{ type: "spring", bounce: 0, duration: 1.6, delay: 1.4 }}
               className="pointer-events-none absolute -right-2 bottom-[-8px] w-[72px] min-[810px]:-right-4 min-[810px]:w-[130px] min-[1280px]:-right-8 min-[1280px]:bottom-[-18px] min-[1280px]:w-[170px]"
             />
-            <h1 className="text-center text-[46px] font-extrabold leading-[0.9] tracking-[-0.02em] text-ink min-[810px]:text-[108px] min-[1280px]:text-[164px] min-[1440px]:text-[174px]">
-              {site.hero.title[0]}
+            <h1 className="text-center text-[46px] font-extrabold leading-[0.9] tracking-[-0.02em] text-ink min-[810px]:text-[120px] min-[1280px]:text-[174px]">
+              <BlurWords text={site.hero.title[0]} trigger="mount" blur={2} duration={2.8} delay={0.25} />
               <br />
-              {site.hero.title[1]}
+              <BlurWords text={site.hero.title[1]} trigger="mount" blur={2} duration={2.8} delay={0.4} />
             </h1>
           </div>
 
-          <div className="mt-8 flex justify-center min-[1280px]:hidden">
-            <img
-              src={site.hero.portrait}
-              alt="Portrait of Majd"
-              className="h-[210px] w-[188px] rounded-[20px] object-cover min-[810px]:h-[250px] min-[810px]:w-[220px]"
-            />
+          <div className="mt-8 min-[1280px]:hidden">
+            <MountPortrait />
           </div>
           <p className="mt-6 text-center text-[18px] tracking-[-0.04em] min-[1280px]:hidden">{site.hero.since}</p>
 
@@ -118,14 +174,17 @@ export function HomePage({ featured, thoughts }: { featured: Project[]; thoughts
           </div>
         </section>
 
-        <Portrait wrap={wrap} />
+        <ScrollPortrait />
 
         <section id="bio-section" className="mx-auto flex min-h-[100svh] w-full max-w-page flex-col justify-center px-5 py-24 min-[810px]:px-12 min-[1280px]:px-0">
           <div className="grid items-center gap-10 min-[1280px]:grid-cols-[1fr_400px_1fr] min-[1280px]:gap-8">
             <div>
-              <h2 className="text-[46px] font-semibold leading-none tracking-[-0.02em] min-[810px]:text-[62px] min-[1280px]:text-[76px]">
-                {site.bio.heading}
-              </h2>
+              <BlurWords
+                as="h2"
+                text={site.bio.heading}
+                blur={10}
+                className="text-[46px] font-semibold leading-none tracking-[-0.02em] min-[810px]:text-[62px] min-[1280px]:text-[76px]"
+              />
               <p className="mt-8 max-w-[340px] text-[22px] font-semibold leading-[1.4] tracking-[-0.04em] min-[1280px]:mt-16">
                 {site.bio.lead}
               </p>
@@ -150,28 +209,24 @@ export function HomePage({ featured, thoughts }: { featured: Project[]; thoughts
       <QuoteWords />
 
       <section id="services" className="mx-auto w-full max-w-page px-5 py-8 min-[810px]:px-12 min-[1280px]:px-0">
-        <Reveal>
-          <h2 className="text-[46px] font-semibold leading-none tracking-[-0.02em] min-[810px]:text-[62px] min-[1280px]:text-[76px]">
-            {site.services.heading}
-          </h2>
-        </Reveal>
+        <BlurWords
+          as="h2"
+          text={site.services.heading}
+          className="text-[46px] font-semibold leading-none tracking-[-0.02em] min-[810px]:text-[62px] min-[1280px]:text-[76px]"
+        />
         <div className="mt-12 border-t border-ink/10">
-          {site.services.items.map((item, i) => (
-            <Reveal key={item.title} delay={i * 0.05}>
-              <div className="flex flex-col gap-3 border-b border-ink/10 py-8 min-[810px]:flex-row min-[810px]:items-center min-[810px]:justify-between min-[810px]:py-10">
-                <h3 className="text-[28px] font-medium leading-[1.2] tracking-[-0.02em] min-[810px]:text-[30px] min-[1280px]:text-[32px]">
-                  {item.title}
-                </h3>
-                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[18px] tracking-[-0.04em] text-ink/50">
-                  {item.tags.map((tag, idx) => (
-                    <span key={tag} className="inline-flex items-center gap-3">
-                      {idx > 0 && <span className="h-1 w-1 rounded-full bg-ink/70" />}
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </Reveal>
+          {site.services.items.map((item) => (
+            <div
+              key={item.title}
+              className="flex flex-col gap-3 border-b border-ink/10 py-8 min-[810px]:flex-row min-[810px]:items-center min-[810px]:justify-between min-[810px]:py-10"
+            >
+              <BlurWords
+                as="h3"
+                text={item.title}
+                className="text-[28px] font-medium leading-[1.2] tracking-[-0.02em] min-[810px]:text-[30px] min-[1280px]:text-[32px]"
+              />
+              <BlurWords text={item.tags.join("  ·  ")} className="text-[18px] tracking-[-0.04em] text-ink/50" duration={1.4} blur={6} />
+            </div>
           ))}
         </div>
       </section>
@@ -179,9 +234,9 @@ export function HomePage({ featured, thoughts }: { featured: Project[]; thoughts
       <section className="mx-auto w-full max-w-page px-5 py-24 min-[810px]:px-12 min-[1280px]:px-0">
           <div className="flex items-end justify-between gap-6">
           <h2 className="max-w-[520px] text-[46px] font-semibold leading-[1] tracking-[-0.02em] min-[810px]:text-[62px] min-[1280px]:text-[76px]">
-            Featured
+            <BlurWords text="Featured" />
             <br />
-            Projects
+            <BlurWords text="Projects" delay={0.12} />
           </h2>
           <div className="mb-2 min-[1280px]:mr-[150px]">
             <ArrowLink href={site.projectsSection.href}>{site.projectsSection.cta}</ArrowLink>
@@ -201,13 +256,20 @@ export function HomePage({ featured, thoughts }: { featured: Project[]; thoughts
       </section>
 
       <section className="mx-auto w-full max-w-page px-5 py-10 min-[810px]:px-12 min-[1280px]:px-0">
-        <h2 className="text-[46px] font-semibold leading-none tracking-[-0.02em] min-[810px]:text-[62px] min-[1280px]:text-[76px]">
-          {site.testimonials.heading}
-        </h2>
+        <BlurWords
+          as="h2"
+          text={site.testimonials.heading}
+          className="text-[46px] font-semibold leading-none tracking-[-0.02em] min-[810px]:text-[62px] min-[1280px]:text-[76px]"
+        />
         <div className="mt-12 grid gap-4 sm:grid-cols-2 min-[1280px]:grid-cols-4">
           {site.testimonials.items.map((item) => (
             <article key={item.name} className="group h-[340px] [perspective:1200px]">
-              <div className="relative h-full w-full transition-transform duration-700 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
+              <motion.div
+                className="relative h-full w-full [transform-style:preserve-3d]"
+                initial={{ rotateY: 0 }}
+                whileHover={{ rotateY: 180 }}
+                transition={{ type: "spring", bounce: 0.2, duration: 1.6 }}
+              >
                 <div className="absolute inset-0 flex flex-col justify-between rounded-card bg-ink p-5 text-cream [backface-visibility:hidden]">
                   <p className="text-[18px] leading-[1.4] tracking-[-0.04em]">{item.quote}</p>
                   <div className="flex items-center gap-3">
@@ -221,16 +283,18 @@ export function HomePage({ featured, thoughts }: { featured: Project[]; thoughts
                 <div className="absolute inset-0 grid place-items-center rounded-card bg-ink [backface-visibility:hidden] [transform:rotateY(180deg)]">
                   <img src={item.logo} alt="" className="h-16 w-16 rounded-xl object-cover" />
                 </div>
-              </div>
+              </motion.div>
             </article>
           ))}
         </div>
       </section>
 
       <section className="mx-auto w-full max-w-page px-5 py-24 min-[810px]:px-12 min-[1280px]:px-0">
-        <h2 className="text-[46px] font-semibold leading-none tracking-[-0.02em] min-[810px]:text-[62px] min-[1280px]:text-[76px]">
-          {site.thoughts.heading}
-        </h2>
+        <BlurWords
+          as="h2"
+          text={site.thoughts.heading}
+          className="text-[46px] font-semibold leading-none tracking-[-0.02em] min-[810px]:text-[62px] min-[1280px]:text-[76px]"
+        />
         <div className="mt-12 grid gap-4 min-[810px]:grid-cols-2 min-[1280px]:grid-cols-3">
           {thoughts.slice(0, 2).map((post) => (
             <PostCard key={post.slug} href={`/blog/${post.slug}`} image={post.image} date={post.date} title={post.title} excerpt={post.blurb} />
@@ -253,9 +317,11 @@ export function HomePage({ featured, thoughts }: { featured: Project[]; thoughts
 
       <section id="contact" className="mx-auto grid w-full max-w-page items-start gap-12 px-5 py-20 min-[810px]:px-12 min-[1280px]:grid-cols-[minmax(0,640px)_minmax(0,484px)] min-[1280px]:justify-between min-[1280px]:px-0 min-[1280px]:py-28">
         <div className="flex min-h-[280px] flex-col min-[1280px]:min-h-[455px]">
-          <h2 className="text-[46px] font-semibold leading-none tracking-[-0.02em] min-[810px]:text-[62px] min-[1280px]:text-[76px]">
-            {site.contact.heading}
-          </h2>
+          <BlurWords
+            as="h2"
+            text={site.contact.heading}
+            className="text-[46px] font-semibold leading-none tracking-[-0.02em] min-[810px]:text-[62px] min-[1280px]:text-[76px]"
+          />
           <p className="mt-4 max-w-[520px] text-[18px] leading-[1.4] tracking-[-0.04em]">{site.contact.body}</p>
           <div className="mt-10 flex gap-3 min-[1280px]:mt-auto">
             {site.socials.map((social) => (

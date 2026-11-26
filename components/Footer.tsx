@@ -1,13 +1,18 @@
 import Link from "next/link";
 import { site } from "@/data/site";
+import { BlurWords } from "./BlurWords";
 
 export function Footer() {
   return (
     <footer className="bg-ink text-cream">
       <div className="mx-auto grid w-full max-w-page items-start gap-12 px-5 pb-6 pt-24 min-[810px]:px-12 min-[1280px]:grid-cols-[1.15fr_0.85fr] min-[1280px]:px-0 min-[1280px]:pt-28">
-        <h2 className="max-w-[520px] text-[46px] font-semibold leading-[1] tracking-[-0.02em] min-[810px]:text-[58px] min-[1280px]:text-[72px]">
-          {site.footer.heading}
-        </h2>
+        <BlurWords
+          as="h2"
+          text={site.footer.heading}
+          blur={6}
+          duration={1.4}
+          className="max-w-[520px] text-[46px] font-semibold leading-[1] tracking-[-0.02em] min-[810px]:text-[58px] min-[1280px]:text-[72px]"
+        />
         <div className="grid gap-10 sm:grid-cols-2">
           <div>
             <p className="text-[16px] tracking-[-0.03em] text-cream/55">{site.footer.quickLinks}</p>
