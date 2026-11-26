@@ -137,7 +137,7 @@ export function HomePage({ featured, thoughts }: { featured: Project[]; thoughts
 
   return (
     <main>
-      <div ref={stage} className="relative hidden h-[200vh] min-[1280px]:block">
+      <div ref={stage} className="relative hidden h-[200vh] overflow-x-clip min-[1280px]:block">
         <ScrollPortrait />
         <div className="absolute inset-0">
           <section id="hero-section" className="mx-auto flex h-screen w-full max-w-[1180px] flex-col px-0 pb-10 pt-[293px]">

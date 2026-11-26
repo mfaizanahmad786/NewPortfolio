@@ -133,10 +133,15 @@ export const site = {
     submit: "Submit",
   },
   footer: {
-    heading: "Scaling Start-ups for Growth.",
-    watermark: "MAJD",
-    quickLinks: "/Quick links",
-    contact: "/Contact",
+    role: ["Software Engineer &", "Framer Creator."],
+    explore: "Explore",
+    getInTouch: "Get in touch",
+    copyrightName: "Majd",
+    farewell: "See you around.",
+    backToTop: "Back to top",
+    caption: "Finally, some traffic on my website.",
+    crowdDescription:
+      "45 illustrated pedestrians in black-and-white ink, students, workers and older people in casual clothes and shalwar kameez, walk past in two rows. Majd stands still among them in a black shirt, loose black trousers and yellow sneakers. People pass in front of him.",
   },
   workPage: {
     title: "My Brightest Creations",
