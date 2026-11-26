@@ -55,3 +55,321 @@ button {
 .no-scrollbar {
   scrollbar-width: none;
 }
+
+/* ---------- Crowd footer (after Aswin Panengal's build notes) ---------- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.site-footer {
+  --footer-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --footer-gutter: clamp(24px, 9vw, 130px);
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  box-sizing: border-box;
+  height: 100svh;
+  min-height: 600px;
+  padding-top: clamp(24px, 5svh, 48px);
+  background: #000;
+  color: #f8f7f4;
+  overflow-x: clip;
+}
+
+.footer-wrap {
+  width: min(calc(100% - var(--footer-gutter) * 2), 1180px);
+  margin-inline: auto;
+}
+
+.footer-top {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr 1fr;
+  align-items: start;
+  gap: 48px;
+}
+.footer-top h2 {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+.footer-identity > p {
+  margin: 16px 0 0;
+  color: #b5b5b5;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.footer-top nav > p,
+.footer-contact > p {
+  margin: 0 0 16px;
+  color: #b5b5b5;
+  font-size: 14px;
+}
+.footer-top nav > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 24px;
+  max-width: 310px;
+}
+.footer-top nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 8px 0;
+  color: #f8f7f4;
+  font-size: 14px;
+}
+.footer-contact a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+.footer-contact > span {
+  display: block;
+  margin-top: 24px;
+  color: #b5b5b5;
+  font-size: 12px;
+}
+.site-footer a:focus-visible {
+  outline: 2px solid #f8f7f4;
+  outline-offset: 5px;
+}
+
+.footer-finale {
+  display: grid;
+  grid-template-rows: 44px minmax(0, 1fr) 62px;
+  min-height: 0;
+  margin-top: clamp(20px, 4svh, 40px);
+}
+.footer-finale-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.footer-finale-heading p {
+  margin: 0;
+  font-size: clamp(26px, 3vw, 42px);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+}
+.footer-finale-heading > a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  font-size: 12px;
+}
+
+.footer-crowd-scene {
+  position: relative;
+  display: block;
+  isolation: isolate;
+  width: 100%;
+  min-height: 0;
+  margin-top: 14px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  background: #fff;
+  color: #141414;
+  font: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.footer-crowd-scene:disabled {
+  cursor: default;
+}
+.footer-crowd-scene:focus-visible {
+  outline: 2px solid #141414;
+  outline-offset: -4px;
+}
+.footer-crowd-name {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  color: #ececec;
+  font-size: min(clamp(100px, 22.7vw, 370px), calc(130vw / var(--name-chars, 6)));
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  text-align: center;
+  white-space: nowrap;
+  user-select: none;
+}
+.footer-crowd-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.footer-crowd-back {
+  z-index: 1;
+}
+.footer-crowd-portrait {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  z-index: 2;
+  width: auto;
+  max-width: none;
+  height: min(365px, 100% - 24px);
+  transform: translateX(-50%);
+  object-fit: contain;
+  pointer-events: none;
+}
+.footer-crowd-front {
+  z-index: 3;
+}
+.footer-scene-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 62px;
+  border-top: 1px solid #282828;
+}
+.footer-scene-bottom small {
+  color: #b5b5b5;
+  font-size: 10px;
+}
+
+@media (max-width: 1024px) {
+  .footer-top {
+    gap: 26px;
+  }
+}
+
+@media (max-width: 600px) {
+  .site-footer {
+    --footer-gutter: 24px;
+    height: auto;
+    min-height: max(620px, 100svh);
+    padding-top: 96px;
+  }
+  .footer-top {
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: 12px 20px;
+  }
+  .footer-top h2 {
+    font-size: 26px;
+  }
+  .footer-identity > p {
+    margin-top: 10px;
+    font-size: 12px;
+  }
+  .footer-top nav > p {
+    margin-bottom: 4px;
+    font-size: 12px;
+  }
+  .footer-top nav > div {
+    gap: 0 16px;
+  }
+  .footer-top nav a {
+    min-height: 36px;
+    padding: 6px 0;
+    font-size: 12px;
+  }
+  .footer-contact {
+    grid-column: 1 / -1;
+  }
+  .footer-contact > p {
+    display: none;
+  }
+  .footer-contact a {
+    min-height: 32px;
+    font-size: 12px;
+  }
+  .footer-contact > span {
+    margin-top: 0;
+    font-size: 10px;
+  }
+  .footer-finale {
+    grid-template-rows: 44px minmax(0, 1fr) 84px;
+    margin-top: 12px;
+  }
+  .footer-finale-heading {
+    gap: 12px;
+  }
+  .footer-finale-heading > a {
+    gap: 7px;
+    font-size: 11px;
+  }
+  .footer-crowd-scene {
+    min-height: clamp(320px, 48svh, 420px);
+    touch-action: pan-y pinch-zoom;
+  }
+  .footer-crowd-name {
+    top: 7px;
+    font-size: min(25vw, calc(130vw / var(--name-chars, 6)));
+  }
+  .footer-crowd-portrait {
+    height: min(clamp(220px, 30svh, 260px), 100% - 24px);
+  }
+  .footer-scene-bottom {
+    box-sizing: border-box;
+    min-height: 84px;
+    padding-bottom: 40px;
+    padding-right: 48px;
+  }
+}
+
+/* Wave hover: each word slides up and its duplicate rises into place. */
+.wave-text {
+  display: inline-block;
+  min-width: 0;
+  max-width: 100%;
+  line-height: 1.3;
+  vertical-align: middle;
+}
+.wave-words {
+  white-space: normal;
+}
+.wave-window {
+  display: inline-block;
+  height: 1.3em;
+  overflow: hidden;
+  line-height: 1.3;
+  white-space: pre;
+  vertical-align: bottom;
+}
+.wave-glyph {
+  position: relative;
+  display: inline-block;
+  line-height: 1.3;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.wave-glyph::after {
+  content: attr(data-char);
+  position: absolute;
+  top: 100%;
+  left: 0;
+}
+.wave-target:focus-visible .wave-glyph {
+  transform: translateY(-100%);
+}
+@media (hover: hover) {
+  .wave-target:hover .wave-glyph {
+    transform: translateY(-100%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wave-glyph {
+    transition: none !important;
+    transform: none !important;
+  }
+}
