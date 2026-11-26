@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --cream: #faf7f3;
+  --ink: #111111;
+}
+
+@keyframes page-enter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.page-enter {
+  animation: page-enter 0.2s cubic-bezier(0.27, 0, 0.51, 1);
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--font-archivo), Archivo, sans-serif;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: #111;
+  color: #faf7f3;
+}
+
+input,
+textarea,
+button {
+  font-family: inherit;
+}
+
+/* Hide scrollbars on horizontal strips without losing scroll. */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  scrollbar-width: none;
+}
