@@ -1,7 +1,5 @@
 /**
- * Experience section copy. EVERY ENTRY BELOW IS A PLACEHOLDER: no real roles, companies or
- * dates for this portfolio's owner were available in the repo, the original Framer content or
- * the GitHub profile. Replace each entry (and delete `placeholder: true`) with real details.
+ * Experience section copy.
  *
  * Fields
  *  - badge       small black pill before the date, e.g. "Current role" / "Ongoing" (optional)
@@ -11,7 +9,8 @@
  *  - placeSub    small grey line under the place, e.g. a city or "Remote" (optional)
  *  - description one or two sentences
  *
- * Entries are laid out left → right on desktop (newest first) and top → bottom on mobile.
+ * Entries are chronological: oldest on the left (top on mobile), newest on the right (bottom).
+ * The LAST entry is the "current" stop: it gets the filled marker and the pop animation.
  */
 export type ExperienceEntry = {
   badge?: string;
@@ -20,50 +19,51 @@ export type ExperienceEntry = {
   place: string;
   placeSub?: string;
   description: string;
-  placeholder?: boolean;
 };
 
 export const experience = {
   heading: "Experience.",
-  subheading: ["Current work.", "Back to the foundations."],
+  subheading: ["Where it started,", "and where I am now."],
   entries: [
     {
-      badge: "Current role",
-      date: "[Month YYYY] – Present",
-      title: "[Current role title]",
-      place: "[Company name]",
-      placeSub: "[Location]",
-      description: "[Placeholder] Describe what you do in your current role in one or two sentences.",
-      placeholder: true,
-    },
-    {
       badge: "Ongoing",
-      title: "[Freelance or side work]",
-      place: "[Client projects]",
-      description: "[Placeholder] Describe the freelance or independent work you do.",
-      placeholder: true,
+      date: "2023 – 2027",
+      title: "Bachelor of Science in Computer Science",
+      place: "COMSATS University Islamabad",
+      placeSub: "Islamabad",
+      description: "Currently pursuing a BS in Computer Science.",
     },
     {
-      date: "[YYYY] – [YYYY]",
-      title: "[Latest degree or course]",
-      place: "[University or school]",
-      description: "[Placeholder] Graduation date, grade or a highlight.",
-      placeholder: true,
+      date: "2024 – 2025",
+      title: "Freelance Web Developer",
+      place: "Client projects",
+      placeSub: "Remote",
+      description: "Built websites and web apps for clients.",
     },
     {
-      date: "[Month YYYY] – [Month YYYY]",
-      title: "[Earlier role or internship]",
-      place: "[Company name]",
-      placeSub: "[Location or Remote]",
-      description: "[Placeholder] Describe what you worked on.",
-      placeholder: true,
+      date: "2025 – 2026",
+      title: "Frontend Developer",
+      place: "Speed Speak",
+      placeSub: "Remote (UK)",
+      description:
+        "Built the website, a web app and a mobile app for a UK translation company, bringing qualified interpreters together on one platform.",
     },
     {
-      date: "[YYYY] – [YYYY]",
-      title: "[Earlier degree or course]",
-      place: "[University or school]",
-      description: "[Placeholder] Grade or a highlight.",
-      placeholder: true,
+      date: "June 2026 – August 2026",
+      title: "AI Intern",
+      place: "Taleemabad",
+      placeSub: "Islamabad",
+      description:
+        "Worked on AI features as an intern at Taleemabad, a Pakistani edtech company building digital tools for schools.",
+    },
+    {
+      badge: "Current role",
+      date: "August 2026 – Present",
+      title: "Software Engineer",
+      place: "Saak Remit",
+      placeSub: "Remote (UK)",
+      description:
+        "Building internal tools and developing and managing the digital wallet and remittance app for a UK remittance company serving South Asia.",
     },
   ] satisfies ExperienceEntry[],
 };

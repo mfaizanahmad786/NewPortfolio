@@ -394,8 +394,9 @@ button {
 .journey-roadmap[data-drawn="true"] .journey-road-ink {
   animation: career-road-draw 1.8s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
+/* The current role is the last stop, so its pin pops as the ink reaches it. */
 .journey-roadmap[data-drawn="true"] .journey-marker[data-now="true"] {
-  animation: career-pin-arrive 0.8s;
+  animation: career-pin-arrive 0.8s 1s both;
 }
 @keyframes career-road-draw {
   0% { stroke-dashoffset: 1px; }

@@ -156,7 +156,7 @@ export function Experience() {
             key={`${entry.title}-${i}`}
             entry={entry}
             index={i}
-            now={i === 0}
+            now={i === experience.entries.length - 1}
             markerRef={(node) => {
               markers.current[i] = node;
             }}
