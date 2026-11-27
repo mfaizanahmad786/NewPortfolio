@@ -97,7 +97,12 @@ function sliceSheet(img: HTMLImageElement, src: string): Omit<Sprite, "scale">[]
   return out;
 }
 
-/** Normalize figure scale: each sprite's height is pulled toward the median, within ±12%. */
+/**
+ * Normalize figure scale. Drawn height is `rowHeight * clamped`, not the source
+ * pixel height, so 400–470px v2 figures land at the same on-screen size as the
+ * earlier ~360–430px sheets and stay in scale with the character (365px desktop,
+ * ~220–260px mobile). Relative size is pulled toward the median, within ±12%.
+ */
 function normalize(raw: Omit<Sprite, "scale">[]): Sprite[] {
   if (!raw.length) return [];
   const heights = raw.map((s) => s.sh).sort((a, b) => a - b);
@@ -105,7 +110,8 @@ function normalize(raw: Omit<Sprite, "scale">[]): Sprite[] {
   return raw.map((s) => {
     const rel = s.sh / median;
     const clamped = Math.min(1.12, Math.max(0.88, rel));
-    return { ...s, scale: clamped / s.sh }; // draw height = rowHeight * clamped
+    // draw height = rowHeight * walker.size * clamped  (s.sh cancels out)
+    return { ...s, scale: clamped / s.sh };
   });
 }
 
