@@ -54,7 +54,7 @@ export const experience = {
       place: "Taleemabad",
       placeSub: "Islamabad",
       description:
-        "Worked on AI features as an intern at Taleemabad, a Pakistani edtech company building digital tools for schools.",
+        "Orchestrated multi-agent AI workflows and built custom Claude skills, plugins and MCP integrations, plus background workers for async job processing.",
     },
     {
       badge: "Current role",

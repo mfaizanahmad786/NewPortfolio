@@ -3,11 +3,10 @@
 import { useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { site } from "@/data/site";
-import type { Post, Project } from "@/lib/content";
+import type { Project } from "@/lib/content";
 import { ArrowLink } from "./ArrowLink";
 import { BlurWords } from "./BlurWords";
 import { Experience } from "./Experience";
-import { PostCard } from "./PostCard";
 import { ProjectCard } from "./ProjectCard";
 import { SocialIcon } from "./Icons";
 
@@ -132,7 +131,7 @@ function MountPortrait() {
   );
 }
 
-export function HomePage({ featured, thoughts }: { featured: Project[]; thoughts: Post[] }) {
+export function HomePage({ featured }: { featured: Project[] }) {
   const stage = useRef<HTMLDivElement>(null);
   const [sent, setSent] = useState(false);
 
@@ -350,32 +349,6 @@ export function HomePage({ featured, thoughts }: { featured: Project[]; thoughts
         </div>
       </section>
 
-      <section className="mx-auto w-full max-w-page px-5 py-24 min-[810px]:px-12 min-[1280px]:px-0">
-        <BlurWords
-          as="h2"
-          text={site.thoughts.heading}
-          className="text-[46px] font-semibold leading-none tracking-[-0.02em] min-[810px]:text-[62px] min-[1280px]:text-[76px]"
-        />
-        <div className="mt-12 grid gap-4 min-[810px]:grid-cols-2 min-[1280px]:grid-cols-3">
-          {thoughts.slice(0, 2).map((post) => (
-            <PostCard key={post.slug} href={`/blog/${post.slug}`} image={post.image} date={post.date} title={post.title} excerpt={post.blurb} />
-          ))}
-          <div className="flex min-h-[420px] flex-col justify-between rounded-card bg-[#1a1a1a] p-6 text-cream min-[810px]:col-span-2 min-[1280px]:col-span-1 min-[1280px]:min-h-[460px]">
-            <p className="max-w-[340px] text-[32px] font-normal leading-[1.2] tracking-[-0.02em] min-[1280px]:text-[40px]">
-              {site.thoughts.promo}
-            </p>
-            <ArrowLink href={site.thoughts.href} tone="light">
-              {site.thoughts.cta}
-            </ArrowLink>
-          </div>
-          {thoughts.slice(2, 3).map((post) => (
-            <div key={post.slug} className="min-[1280px]:hidden">
-              <PostCard href={`/blog/${post.slug}`} image={post.image} date={post.date} title={post.title} excerpt={post.blurb} />
-            </div>
-          ))}
-        </div>
-      </section>
-
       <Experience />
 
       <section id="contact" className="mx-auto grid w-full max-w-page items-start gap-12 px-5 py-20 min-[810px]:px-12 min-[1280px]:grid-cols-[minmax(0,640px)_minmax(0,484px)] min-[1280px]:justify-between min-[1280px]:px-0 min-[1280px]:py-28">
@@ -456,30 +429,5 @@ export function PageIntro({ title, description }: { title: string; description: 
       </h1>
       <p className="mt-5 max-w-[460px] text-[16px] leading-[1.45] tracking-[-0.03em] text-ink/80">{description}</p>
     </header>
-  );
-}
-
-export function NewsletterForm() {
-  const [sent, setSent] = useState(false);
-  return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        setSent(true);
-      }}
-      className="rounded-[20px] bg-ink p-5 text-cream"
-    >
-      <p className="text-[20px] font-medium tracking-[-0.03em]">{site.newsletter.heading}</p>
-      <p className="mt-1 text-[14px] tracking-[-0.02em] text-cream/70">{site.newsletter.body}</p>
-      <input
-        required
-        type="email"
-        placeholder={site.newsletter.placeholder}
-        className="mt-4 h-11 w-full rounded-[12px] border border-cream/30 bg-transparent px-3 text-[15px] outline-none placeholder:text-cream/50 focus:border-cream"
-      />
-      <button type="submit" className="mt-3 h-11 w-full rounded-[8px] bg-cream text-[16px] text-ink hover:bg-white">
-        {sent ? "Sent" : site.newsletter.submit}
-      </button>
-    </form>
   );
 }
