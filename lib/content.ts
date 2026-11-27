@@ -1,5 +1,5 @@
 import raw from "@/data/content.json";
-import { liveLinks, postBlurbs, postOrder, projectOrder } from "@/data/site";
+import { liveLinks, projectOrder } from "@/data/site";
 
 export type RawBlock = {
   type: string;
@@ -20,18 +20,6 @@ export type Project = {
   subtitle: string;
   blocks: RawBlock[];
   related: { slug: string; title: string; subtitle: string; image: string }[];
-};
-
-export type Post = {
-  slug: string;
-  title: string;
-  excerpt: string;
-  blurb: string;
-  date: string;
-  readTime: string;
-  image: string;
-  blocks: RawBlock[];
-  related: { slug: string; title: string; excerpt: string; date: string; image: string }[];
 };
 
 const content = raw as Record<string, RawBlock[]>;
@@ -117,83 +105,6 @@ export const projects: Project[] = projectDrafts.map((p) => ({
 
 export function getProject(slug: string) {
   return projects.find((p) => p.slug === slug);
-}
-
-function parsePost(slug: string): Omit<Post, "related"> & { relatedTitles: { title: string; excerpt: string; date: string; image: string }[] } {
-  const blocks = content[slug] ?? [];
-  const title = blocks.find((b) => b.type === "h1")?.text ?? slug;
-  const texts = paragraphs(blocks);
-  const excerpt = texts[0] ?? "";
-  const date = texts[1] ?? "";
-  const readTime = texts[2] ?? "";
-  const moreIdx = blocks.findIndex((b) => b.type === "h2" && b.text === "More Articles");
-  const pre = moreIdx === -1 ? blocks : blocks.slice(0, moreIdx);
-  const hero = pre.find((b) => b.type === "img" && b.src);
-  const skip = new Set([excerpt, date, readTime, "Be the first to read our articles.", "Submit", "Join the newsletter"]);
-  const body = pre.filter((b) => {
-    if (b.type === "h1") return false;
-    if (b.type === "img" && b.src === hero?.src) return false;
-    if (b.type === "p" && skip.has(b.text ?? "")) return false;
-    return true;
-  });
-  const relatedBlocks = moreIdx === -1 ? [] : blocks.slice(moreIdx + 1);
-  const relatedTitles: { title: string; excerpt: string; date: string; image: string }[] = [];
-  let image = "";
-  let dateBuf = "";
-  for (const block of relatedBlocks) {
-    if (block.type === "img" && block.src) image = media(block.src);
-    if (block.type === "p" && block.text && /\d{4}/.test(block.text) && block.text.length < 24) dateBuf = block.text;
-    if (block.type === "h3" && block.text) {
-      if (!relatedTitles.some((r) => r.title === block.text)) {
-        relatedTitles.push({ title: block.text, excerpt: "", date: dateBuf, image });
-      }
-    }
-    if (block.type === "p" && block.text && relatedTitles.length) {
-      const last = relatedTitles[relatedTitles.length - 1];
-      if (!last.excerpt && block.text !== last.date) last.excerpt = block.text;
-    }
-  }
-  return {
-    slug,
-    title,
-    excerpt,
-    blurb: postBlurbs[slug] ?? excerpt,
-    date,
-    readTime,
-    image: hero?.src ? media(hero.src) : "",
-    blocks: body,
-    relatedTitles,
-  };
-}
-
-const postDrafts = postOrder.map((slug) => parsePost(slug));
-const postTitleToSlug = Object.fromEntries(postDrafts.map((p) => [p.title, p.slug]));
-
-export const posts: Post[] = postDrafts.map((p) => ({
-    slug: p.slug,
-    title: p.title,
-    excerpt: p.excerpt,
-    blurb: p.blurb,
-    date: p.date,
-  readTime: p.readTime,
-  image: p.image,
-  blocks: p.blocks,
-  related: p.relatedTitles
-    .map((r) => {
-      const match = postDrafts.find((d) => d.title === r.title);
-      return {
-        slug: postTitleToSlug[r.title] ?? "",
-        title: r.title,
-        excerpt: match?.blurb || r.excerpt || "",
-        date: r.date || match?.date || "",
-        image: r.image || match?.image || "",
-      };
-    })
-    .filter((r) => r.slug),
-}));
-
-export function getPost(slug: string) {
-  return posts.find((p) => p.slug === slug);
 }
 
 export function isListItem(text: string) {

@@ -107,12 +107,6 @@ export const site = {
       },
     ],
   },
-  thoughts: {
-    heading: "Thoughts",
-    promo: "See how we shape brands with clarity and craft— explore our blog",
-    cta: "View All Work",
-    href: "/blog",
-  },
   contact: {
     heading: "Let’s talk.",
     body: "Have a project or need help? Fill out the form, and we'll get back to you soon.",
@@ -125,12 +119,6 @@ export const site = {
       projectPlaceholder: "Tell us about your project",
       submit: "Submit",
     },
-  },
-  newsletter: {
-    heading: "Join the newsletter",
-    body: "Be the first to read our articles.",
-    placeholder: "Enter your email",
-    submit: "Submit",
   },
   footer: {
     role: ["Software Engineer &", "Framer Creator."],
@@ -148,13 +136,7 @@ export const site = {
     description:
       "A showcase of my latest projects, highlighting thoughtful design, clear strategy, and impactful results.",
   },
-  blogPage: {
-    title: "My Brightest Thoughts",
-    description:
-      "Discover ideas, perspectives, and creative thinking shaped by our work in brand identity and art direction. Each article explores how thoughtful design helps brands with clarity and intention.",
-  },
   moreProjects: "More Projects",
-  moreArticles: "More Articles",
 };
 
 export const projectOrder = [
@@ -166,34 +148,6 @@ export const projectOrder = [
   "abjad",
   "fasselh",
 ] as const;
-
-export const postOrder = [
-  "how-can-designers-prepare-for-the-future",
-  "why-every-business-needs-a-professional-website-in-2025",
-  "how-creative-teams-build-strong-brand-systems",
-  "the-rise-of-modern-tech-startup-websites",
-  "top-web-design-trends-to-watch-in-2025",
-  "designing-products-with-purpose",
-  "starting-and-growing-a-career-in-web-design",
-] as const;
-
-/** Short blurbs used on cards. Article pages use the longer lead from content.json. */
-export const postBlurbs: Record<string, string> = {
-  "how-can-designers-prepare-for-the-future":
-    "How thoughtful visual choices create a stronger sense of reliability for modern brands.",
-  "why-every-business-needs-a-professional-website-in-2025":
-    "Why visual direction helps brands create emotion and a distinct point of view.",
-  "how-creative-teams-build-strong-brand-systems":
-    "A look at the workflows that keep branding consistent across every touchpoint.",
-  "the-rise-of-modern-tech-startup-websites":
-    "Why tech startups need clear, high trust digital experiences to communicate and attract users.",
-  "top-web-design-trends-to-watch-in-2025":
-    "Stay ahead of the curve with these key design trends shaping the future of the web.",
-  "designing-products-with-purpose":
-    "How mission-led design turns digital products into richer, more meaningful experiences.",
-  "starting-and-growing-a-career-in-web-design":
-    "Web design blends creativity and tech, offering strong demand and roles in design.",
-};
 
 export const liveLinks: Record<string, string> = {
   damas: "https://framer.link/KhRj2A5?duplicateType=siteTemplate",
