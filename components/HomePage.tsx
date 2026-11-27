@@ -6,6 +6,7 @@ import { site } from "@/data/site";
 import type { Post, Project } from "@/lib/content";
 import { ArrowLink } from "./ArrowLink";
 import { BlurWords } from "./BlurWords";
+import { Experience } from "./Experience";
 import { PostCard } from "./PostCard";
 import { ProjectCard } from "./ProjectCard";
 import { SocialIcon } from "./Icons";
@@ -374,6 +375,8 @@ export function HomePage({ featured, thoughts }: { featured: Project[]; thoughts
           ))}
         </div>
       </section>
+
+      <Experience />
 
       <section id="contact" className="mx-auto grid w-full max-w-page items-start gap-12 px-5 py-20 min-[810px]:px-12 min-[1280px]:grid-cols-[minmax(0,640px)_minmax(0,484px)] min-[1280px]:justify-between min-[1280px]:px-0 min-[1280px]:py-28">
         <div className="flex min-h-[280px] flex-col min-[1280px]:min-h-[455px]">

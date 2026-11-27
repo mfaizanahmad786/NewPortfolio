@@ -12,6 +12,7 @@ const menu = [
   { label: "About Me", href: "/#bio-section" },
   { label: "Services", href: "/#services" },
   { label: "Projects", href: "/work" },
+  { label: "Experience", href: "/#experience" },
   { label: "Contact", href: "/#contact" },
 ];
 
