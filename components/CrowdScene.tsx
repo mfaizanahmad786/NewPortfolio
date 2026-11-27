@@ -8,12 +8,23 @@ import { useCallback, useEffect, useId, useRef, useState } from "react";
  * cut from 5×3 sprite sheets that slide and bob; the character never moves.
  */
 
-const SHEETS = ["/footer/crowd-01.webp", "/footer/crowd-02.webp", "/footer/crowd-03.webp"];
+const SHEETS = [
+  "/footer/crowd-01.webp",
+  "/footer/crowd-02.webp",
+  "/footer/crowd-03.webp",
+  "/footer/crowd-04.webp", // the friends, row-major in the order below
+];
+const FRIEND_SHEET = 3;
+// Friend order: tayyab, ammar, ibrahim, hashir, mujtuba, abdullah, hadi, khurshid (see scripts/build-friends-sheet.py).
+// Friends are full-body drawings while the crowd is waist-up, so they are scaled up to the
+// crowd's head size and cropped at the waist (rear row) or by the scene edge (front row).
+const FRIEND_BOOST = 1.5;
+const FRIEND_CROP = { rear: 0.62, front: 0.8 };
 const COLS = 5;
 const ROWS = 3;
 const CHARACTER = { src: "/footer/character.webp", width: 370, height: 1129 };
 
-type Sprite = { img: HTMLImageElement; sx: number; sy: number; sw: number; sh: number; scale: number };
+type Sprite = { img: HTMLImageElement; sx: number; sy: number; sw: number; sh: number; scale: number; friend?: number };
 
 type Walker = {
   sprite: number;
@@ -48,7 +59,7 @@ function loadImage(src: string) {
 }
 
 /** Validate the 5×3 grid, then trim every cell to its non-transparent bounds. */
-function sliceSheet(img: HTMLImageElement, src: string): Omit<Sprite, "scale">[] {
+function sliceSheet(img: HTMLImageElement, src: string, friends = false): Omit<Sprite, "scale">[] {
   const { naturalWidth: w, naturalHeight: h } = img;
   if (w % COLS !== 0 || h % ROWS !== 0 || Math.abs(w / h - 4 / 3) > 0.02) {
     console.error(`[crowd] ${src} is ${w}×${h}; expected an exact 5×3 grid on a 4:3 canvas. Regenerate the sheet.`);
@@ -88,10 +99,16 @@ function sliceSheet(img: HTMLImageElement, src: string): Omit<Sprite, "scale">[]
         }
       }
       if (maxX < 0 || maxX - minX < 20 || maxY - minY < 20) {
-        console.warn(`[crowd] ${src} cell r${r + 1}c${c + 1} is empty; skipping.`);
-        continue;
+        continue; // unused cell (the friends sheet holds 8 of 15)
       }
-      out.push({ img, sx: x0 + minX, sy: y0 + minY, sw: maxX - minX + 1, sh: maxY - minY + 1 });
+      out.push({
+        img,
+        sx: x0 + minX,
+        sy: y0 + minY,
+        sw: maxX - minX + 1,
+        sh: maxY - minY + 1,
+        friend: friends ? out.length : undefined,
+      });
     }
   }
   return out;
@@ -115,37 +132,50 @@ function normalize(raw: Omit<Sprite, "scale">[]): Sprite[] {
   });
 }
 
-function buildWalkers(count: number, mobile: boolean): Walker[] {
+/**
+ * Build both rows. Counts come from the row's loop length and figure width so the crowd stays
+ * dense at any viewport. Friends are placed deterministically: half in each row, evenly spaced,
+ * so every friend is on screen in every crossing.
+ */
+function buildWalkers(sprites: Sprite[], counts: { rear: number; front: number }, mobile: boolean): Walker[] {
   const rand = rng(mobile ? 7 : 1337);
-  const rearCount = mobile ? 7 : 25;
-  const frontCount = mobile ? 3 : 16;
-  // Shuffle sprite indices so neighbours differ; walkers take them round-robin.
-  const order = Array.from({ length: count }, (_, i) => i);
-  for (let i = order.length - 1; i > 0; i--) {
+  const crowd: number[] = [];
+  const friends: number[] = [];
+  sprites.forEach((s, i) => (s.friend === undefined ? crowd : friends).push(i));
+  friends.sort((a, b) => (sprites[a].friend as number) - (sprites[b].friend as number));
+  // Shuffled crowd order; consumed round-robin so neighbours differ.
+  for (let i = crowd.length - 1; i > 0; i--) {
     const j = Math.floor(rand() * (i + 1));
-    [order[i], order[j]] = [order[j], order[i]];
+    [crowd[i], crowd[j]] = [crowd[j], crowd[i]];
   }
   let cursor = 0;
-  const next = () => order[cursor++ % order.length];
+  const nextCrowd = () => crowd[cursor++ % crowd.length];
+  // Even friends go to the rear row, odd to the front, interleaved so rows differ.
+  const friendsFor = (row: "rear" | "front") => friends.filter((_, k) => (row === "rear" ? k % 2 === 0 : k % 2 === 1));
+
   const walkers: Walker[] = [];
   const make = (row: "rear" | "front", n: number) => {
+    const mine = friendsFor(row);
+    const slots = new Map<number, number>();
+    mine.forEach((sprite, k) => slots.set(Math.floor(((k + 0.5) * n) / Math.max(1, mine.length)) % n, sprite));
     for (let i = 0; i < n; i++) {
+      const friend = slots.get(i);
       walkers.push({
-        sprite: next(),
+        sprite: friend ?? nextCrowd(),
         row,
-        // Even spread with jitter so there are natural gaps without bunching.
-        phase: (i + rand() * 0.7) / n,
-        canvas: row === "front" ? "front" : i % 8 === 5 ? "front" : "back",
+        phase: (i + (rand() - 0.5) * 0.24) / n,
+        // A couple of rear walkers are drawn over the character; never friends.
+        canvas: row === "front" ? "front" : friend === undefined && i % 9 === 4 ? "front" : "back",
         crossing: 10 + rand() * 6,
-        size: row === "rear" ? 0.92 + rand() * 0.14 : 0.94 + rand() * 0.12,
+        size: row === "rear" ? 0.94 + rand() * 0.12 : 0.96 + rand() * 0.1,
         bobAmp: 2 + rand() * 6,
         bobPhase: rand() * Math.PI * 2,
         bobRate: 1.8 + rand() * 0.5,
       });
     }
   };
-  make("rear", rearCount);
-  make("front", frontCount);
+  make("rear", Math.max(counts.rear, 4));
+  make("front", Math.max(counts.front, 4));
   return walkers;
 }
 
@@ -203,31 +233,60 @@ export function CrowdScene({ name, description }: { name: string; description: s
       };
     };
 
+    // Row geometry shared by drawing and density: loop = one screen plus a sprite on each side.
+    const layout = () => {
+      const m = metrics();
+      const crowdSprites = sprites.filter((sp) => sp.friend === undefined);
+      const aspect = crowdSprites.length
+        ? crowdSprites.reduce((sum, sp) => sum + sp.sw / sp.sh, 0) / crowdSprites.length
+        : 0.7;
+      const padRear = m.rearH * 1.1;
+      const padFront = m.frontH * 1.1;
+      const loopRear = width + padRear * 2;
+      const loopFront = width + padFront * 2;
+      // Spacing in figure widths: ~0.8 on desktop so shoulders overlap and gaps stay rare. Phones
+      // are looser so the character is never buried on a 390px-wide scene.
+      const gap = mobile ? { rear: 1.1, front: 1.7 } : { rear: 0.78, front: 0.8 };
+      const cap = mobile ? { rear: 12, front: 8 } : { rear: 30, front: 18 };
+      return {
+        m,
+        padRear,
+        padFront,
+        loopRear,
+        loopFront,
+        counts: {
+          rear: Math.min(cap.rear, Math.ceil(loopRear / (m.rearH * aspect * gap.rear))),
+          front: Math.min(cap.front, Math.ceil(loopFront / (m.frontH * aspect * gap.front))),
+        },
+      };
+    };
+
     const draw = () => {
       backCtx.clearRect(0, 0, width, height);
       frontCtx.clearRect(0, 0, width, height);
       if (!sprites.length || !width) return;
-      const m = metrics();
+      const { m, padRear, padFront, loopRear, loopFront } = layout();
       for (const w of walkers) {
         const s = sprites[w.sprite % sprites.length];
-        const rowH = w.row === "rear" ? m.rearH : m.frontH;
-        const dh = rowH * w.size * s.scale * s.sh;
-        const dw = dh * (s.sw / s.sh);
-        // Loop length covers the viewport plus one sprite on each side, so wrapping is seamless.
-        const pad = rowH * 1.1;
-        // Spread each row over a stretch wider than the screen so only part of it is visible at
-        // once, leaving natural gaps through which the character shows.
-        const spread = mobile ? (w.row === "rear" ? 1.7 : 1.3) : 2.8;
-        const loop = Math.max(width + pad * 2, width * spread);
+        const rear = w.row === "rear";
+        const rowH = rear ? m.rearH : m.frontH;
+        const crop = s.friend === undefined ? 1 : rear ? FRIEND_CROP.rear : FRIEND_CROP.front;
+        const boost = s.friend === undefined ? 1 : FRIEND_BOOST;
+        const sh = s.sh * crop; // visible slice of the sprite (top part for friends)
+        // Draw height is independent of source pixels: rowHeight * size * normalized scale.
+        const dh = rowH * w.size * s.scale * s.sh * boost * crop;
+        const dw = dh * (s.sw / sh);
+        const pad = rear ? padRear : padFront;
+        const loop = rear ? loopRear : loopFront;
         const speed = width / w.crossing;
-        const dir = w.row === "rear" ? 1 : -1; // rear walks right, front walks left
+        const dir = rear ? 1 : -1; // rear walks right, front walks left (nobody is mirrored)
         let x = (w.phase * loop + dir * speed * elapsed) % loop;
         if (x < 0) x += loop;
         x -= pad;
         const bob = w.bobAmp * Math.abs(Math.sin(Math.PI * w.bobRate * elapsed + w.bobPhase));
-        const y = w.row === "rear" ? m.rearBottom - dh - bob : m.frontTop - bob;
+        const y = rear ? m.rearBottom - dh - bob : m.frontTop - bob;
         const ctx = w.canvas === "back" ? backCtx : frontCtx;
-        ctx.drawImage(s.img, s.sx, s.sy, s.sw, s.sh, x - dw / 2, y, dw, dh);
+        ctx.drawImage(s.img, s.sx, s.sy, s.sw, sh, x - dw / 2, y, dw, dh);
       }
     };
 
@@ -260,12 +319,17 @@ export function CrowdScene({ name, description }: { name: string; description: s
     const resize = () => {
       const rect = scene.getBoundingClientRect();
       const nextMobile = window.innerWidth < 600;
-      if (nextMobile !== mobile || !walkers.length) {
-        mobile = nextMobile;
-        if (sprites.length) walkers = buildWalkers(sprites.length, mobile);
-      }
       width = rect.width;
       height = rect.height;
+      const wasMobile = mobile;
+      mobile = nextMobile;
+      if (sprites.length) {
+        const counts = layout().counts;
+        const have = (row: Walker["row"]) => walkers.filter((w) => w.row === row).length;
+        if (wasMobile !== mobile || !walkers.length || counts.rear !== have("rear") || counts.front !== have("front")) {
+          walkers = buildWalkers(sprites, counts, mobile);
+        }
+      }
       const dpr = Math.min(2, window.devicePixelRatio || 1);
       for (const [canvas, ctx] of [[back, backCtx], [front, frontCtx]] as const) {
         canvas.width = Math.max(1, Math.round(width * dpr));
@@ -313,11 +377,11 @@ export function CrowdScene({ name, description }: { name: string; description: s
           console.error(`[crowd] ${r.reason}`);
           return [];
         }
-        return sliceSheet(r.value, SHEETS[i]);
+        return sliceSheet(r.value, SHEETS[i], i === FRIEND_SHEET);
       });
       sprites = normalize(raw);
       if (!sprites.length) return; // links and character stay; scene is just empty
-      walkers = buildWalkers(sprites.length, mobile);
+      walkers = buildWalkers(sprites, layout().counts, mobile);
       // Static layout under reduced motion: a mid-stride moment with people around the character.
       elapsed = reduce ? 4.2 : 0;
       setReady(true);
