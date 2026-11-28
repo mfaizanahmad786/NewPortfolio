@@ -8,51 +8,9 @@ import { ArrowLink } from "./ArrowLink";
 import { BlurWords } from "./BlurWords";
 import { Experience } from "./Experience";
 import { ProjectCard } from "./ProjectCard";
+import { TechStack } from "./TechStack";
 import { SocialIcon } from "./Icons";
 import { WaveLink } from "./WaveLink";
-
-function QuoteWords() {
-  const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start 90%", "start 10%"],
-  });
-  const words = site.quote.split(" ");
-
-  return (
-    <section ref={ref} className="relative h-[1350px]">
-      <div className="sticky top-0 flex h-[100svh] items-center justify-center px-5">
-        <p className="max-w-[980px] text-center text-[26px] font-medium leading-[1.28] tracking-[-0.03em] min-[810px]:text-[34px] min-[1280px]:text-[42px]">
-          {words.map((word, i) => (
-            <Word key={`${word}-${i}`} word={word} index={i} total={words.length} progress={scrollYProgress} />
-          ))}
-        </p>
-      </div>
-    </section>
-  );
-}
-
-function Word({
-  word,
-  index,
-  total,
-  progress,
-}: {
-  word: string;
-  index: number;
-  total: number;
-  progress: ReturnType<typeof useScroll>["scrollYProgress"];
-}) {
-  const start = index / total;
-  const end = Math.min(1, start + 1.15 / total);
-  const color = useTransform(progress, [start, end], ["#999999", "#111111"]);
-  return (
-    <motion.span style={{ color }} className="inline">
-      {word}
-      {index < total - 1 ? " " : ""}
-    </motion.span>
-  );
-}
 
 /**
  * The hero portrait flips from black and white to this state as it lands in the intro.
@@ -301,7 +259,7 @@ export function HomePage({ featured }: { featured: Project[] }) {
         </section>
       </div>
 
-      <QuoteWords />
+      <TechStack />
 
       <section id="services" className="mx-auto w-full max-w-page px-5 py-8 min-[810px]:px-12 min-[1280px]:px-0">
         <BlurWords
