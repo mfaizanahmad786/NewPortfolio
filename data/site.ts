@@ -5,10 +5,10 @@
  */
 
 export const site = {
-  name: "Majd",
-  title: "Majd",
+  name: "Faizan",
+  title: "Faizan",
   description:
-    "Majd is a software engineer and Framer creator building modern, scalable, conversion-driven web experiences.",
+    "Faizan is a software engineer and Framer creator building modern, scalable, conversion-driven web experiences.",
   email: "Mejed@Templyo.io",
   emailHref: "mailto:mejed@templyo.io",
   getStartedHref: "https://framer.link/nnhGcWR",
@@ -38,7 +38,7 @@ export const site = {
   },
   bio: {
     heading: "Hey!",
-    lead: "I’m Majd, a builder based in Syria, currently working on Templyo, a platform for high-quality Framer templates.",
+    lead: "I’m Faizan, a builder based in Syria, currently working on Templyo, a platform for high-quality Framer templates.",
     paragraphs: [
       "I’m a software engineer and Framer creator with a strong focus on building modern, scalable, and conversion-driven web experiences.",
       "Over the years, I’ve created and shipped multiple SaaS products and Framer templates used by global customers, helping them launch faster.",
@@ -124,12 +124,12 @@ export const site = {
     role: ["Software Engineer &", "Framer Creator."],
     explore: "Explore",
     getInTouch: "Get in touch",
-    copyrightName: "Majd",
+    copyrightName: "Muhammad Faizan Ahmad",
     farewell: "See you around.",
     backToTop: "Back to top",
     caption: "Finally, some traffic on my website.",
     crowdDescription:
-      "45 illustrated pedestrians in black-and-white ink, students, workers and older people in casual clothes and shalwar kameez, walk past in two rows. Majd stands still among them in a black shirt, loose black trousers and yellow sneakers. People pass in front of him.",
+      "45 illustrated pedestrians in black-and-white ink, students, workers and older people in casual clothes and shalwar kameez, walk past in two rows. Faizan stands still among them in a black shirt, loose black trousers and yellow sneakers. People pass in front of him.",
   },
   workPage: {
     title: "My Brightest Creations",
