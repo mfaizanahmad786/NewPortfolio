@@ -313,14 +313,23 @@ export function HomePage({ featured }: { featured: Project[] }) {
           {site.services.items.map((item) => (
             <div
               key={item.title}
-              className="flex flex-col gap-3 border-b border-ink/10 py-8 min-[810px]:flex-row min-[810px]:items-center min-[810px]:justify-between min-[810px]:py-10"
+              className="flex flex-col gap-4 border-b border-ink/10 py-8 min-[810px]:flex-row min-[810px]:items-start min-[810px]:justify-between min-[810px]:gap-10 min-[810px]:py-10"
             >
               <BlurWords
                 as="h3"
                 text={item.title}
-                className="text-[28px] font-medium leading-[1.2] tracking-[-0.02em] min-[810px]:text-[30px] min-[1280px]:text-[32px]"
+                className="text-[28px] font-medium leading-[1.2] tracking-[-0.02em] min-[810px]:max-w-[46%] min-[810px]:text-[30px] min-[1280px]:text-[32px]"
               />
-              <BlurWords text={item.tags.join("  ·  ")} className="text-[18px] tracking-[-0.04em] text-ink/50" duration={1.4} blur={6} />
+              <div className="flex flex-col gap-3 min-[810px]:w-[46%] min-[810px]:shrink-0 min-[1280px]:w-[44%]">
+                <BlurWords
+                  as="p"
+                  text={item.description}
+                  className="text-[18px] leading-[1.45] tracking-[-0.02em] text-ink/80"
+                  duration={1.4}
+                  blur={6}
+                />
+                <BlurWords text={item.tags.join("  ·  ")} className="text-[15px] tracking-[-0.03em] text-ink/45" duration={1.4} blur={6} />
+              </div>
             </div>
           ))}
         </div>
