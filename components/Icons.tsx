@@ -6,20 +6,16 @@ export function ArrowIcon({ className = "h-3.5 w-3.5" }: { className?: string })
   );
 }
 
-export function DotsIcon() {
+export function ChevronDownIcon({ open = false }: { open?: boolean }) {
   return (
-    <svg viewBox="0 0 24 24" className="h-5 w-5" aria-hidden>
-      <circle cx="6" cy="12" r="1.4" fill="currentColor" />
-      <circle cx="12" cy="12" r="1.4" fill="currentColor" />
-      <circle cx="18" cy="12" r="1.4" fill="currentColor" />
-    </svg>
-  );
-}
-
-export function CloseIcon() {
-  return (
-    <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden>
-      <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+    <svg
+      viewBox="0 0 24 24"
+      className="h-5 w-5 transition-transform duration-300 ease-out"
+      style={{ transform: open ? "rotate(180deg)" : "rotate(0deg)" }}
+      fill="none"
+      aria-hidden
+    >
+      <path d="M6 9.5l6 6 6-6" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }

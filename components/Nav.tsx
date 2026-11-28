@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { site } from "@/data/site";
-import { CloseIcon, DotsIcon } from "./Icons";
+import { ChevronDownIcon } from "./Icons";
 
 const linkSpring = { type: "spring" as const, bounce: 0.2, duration: 0.8 };
 
@@ -43,7 +43,7 @@ export function Nav() {
             onClick={() => setOpen((value) => !value)}
             className="grid h-11 w-11 place-items-center rounded-[12px] bg-cream text-ink transition-colors hover:bg-accent hover:text-cream"
           >
-            {open ? <CloseIcon /> : <DotsIcon />}
+            <ChevronDownIcon open={open} />
           </button>
         </div>
         <AnimatePresence initial={false}>
