@@ -9,6 +9,7 @@ import { BlurWords } from "./BlurWords";
 import { Experience } from "./Experience";
 import { ProjectCard } from "./ProjectCard";
 import { SocialIcon } from "./Icons";
+import { WaveLink } from "./WaveLink";
 
 function QuoteWords() {
   const ref = useRef<HTMLElement>(null);
@@ -53,6 +54,12 @@ function Word({
   );
 }
 
+/**
+ * The hero portrait flips from black and white to this state as it lands in the intro.
+ * The reference keeps the portrait grayscale; set to true to land in colour instead.
+ */
+const LANDS_IN_COLOR = false;
+
 function PortraitFaces({
   rotateFront,
   rotateBack,
@@ -69,14 +76,14 @@ function PortraitFaces({
   return (
     <div className={className} style={{ perspective: 1200 }}>
       <motion.div
-        style={{ rotateY: rotateBack, scale, y }}
-        className="absolute inset-0 overflow-hidden rounded-[20px] [backface-visibility:hidden] [transform-style:preserve-3d]"
+        style={{ rotateY: rotateBack, scale, y, filter: LANDS_IN_COLOR ? "none" : "grayscale(1)" }}
+        className="absolute inset-0 overflow-hidden rounded-[16px] [backface-visibility:hidden] [transform-style:preserve-3d]"
       >
         <img src={site.hero.portrait} alt="" className="h-full w-full object-cover" />
       </motion.div>
       <motion.div
         style={{ rotateY: rotateFront, scale, y, filter: "grayscale(1)" }}
-        className="absolute inset-0 overflow-hidden rounded-[20px] [backface-visibility:hidden] [transform-style:preserve-3d]"
+        className="absolute inset-0 overflow-hidden rounded-[16px] [backface-visibility:hidden] [transform-style:preserve-3d]"
       >
         <img src={site.hero.portrait} alt="Portrait of Faizan" className="h-full w-full object-cover" />
       </motion.div>
@@ -102,7 +109,7 @@ function ScrollPortrait() {
         rotateBack={rotateBack}
         scale={scale}
         y={y}
-        className="relative h-[456px] w-[400px]"
+        className="relative h-[429px] w-[373px]"
       />
     </div>
   );
@@ -112,7 +119,7 @@ function MountPortrait() {
   return (
     <div className="relative mx-auto h-[220px] w-[196px] min-[810px]:h-[250px] min-[810px]:w-[220px]" style={{ perspective: 1200 }}>
       <motion.div
-        className="absolute inset-0 overflow-hidden rounded-[20px] [backface-visibility:hidden]"
+        className={`absolute inset-0 overflow-hidden rounded-[16px] [backface-visibility:hidden] ${LANDS_IN_COLOR ? "" : "grayscale"}`}
         initial={{ rotateY: -180 }}
         animate={{ rotateY: 0 }}
         transition={{ type: "spring", bounce: 0, duration: 1.6, delay: 2 }}
@@ -120,13 +127,75 @@ function MountPortrait() {
         <img src={site.hero.portrait} alt="" className="h-full w-full object-cover" />
       </motion.div>
       <motion.div
-        className="absolute inset-0 overflow-hidden rounded-[20px] grayscale [backface-visibility:hidden]"
+        className="absolute inset-0 overflow-hidden rounded-[16px] grayscale [backface-visibility:hidden]"
         initial={{ rotateY: 0 }}
         animate={{ rotateY: 180 }}
         transition={{ type: "spring", bounce: 0, duration: 1.6, delay: 2 }}
       >
         <img src={site.hero.portrait} alt="Portrait of Faizan" className="h-full w-full object-cover" />
       </motion.div>
+    </div>
+  );
+}
+
+function Bold({ text }: { text: string }) {
+  return (
+    <>
+      {text.split("**").map((part, i) => (i % 2 === 1 ? <strong key={i} className="font-bold">{part}</strong> : part))}
+    </>
+  );
+}
+
+/** Left column of the intro: greeting, title, divider and current role. */
+function IntroText() {
+  const { bio } = site;
+  return (
+    <div className="flex flex-col gap-6 min-[1280px]:gap-8">
+      <h2 className="text-[56px] font-bold leading-[0.98] tracking-[-0.04em] min-[810px]:text-[72px] min-[1280px]:text-[88px]">
+        {bio.greeting.map((line) => (
+          <span key={line} className="block whitespace-nowrap">
+            {line}
+          </span>
+        ))}
+      </h2>
+      <p className="text-[28px] font-bold leading-[1.15] tracking-[-0.01em] min-[810px]:text-[24px] min-[1280px]:text-[31.68px]">
+        {bio.role.split("& Full-Stack").flatMap((part, i, all) =>
+          i < all.length - 1
+            ? [part, <span key={i} className="whitespace-nowrap">& Full-Stack</span>]
+            : [part],
+        )}
+      </p>
+      <div className="border-t border-ink/15 pt-6">
+        <span className="mb-2.5 block text-[14px] font-medium leading-[1.6] text-ink/60">{bio.currentLabel}</span>
+        <p className="text-[18px] font-medium leading-[1.5] tracking-[-0.02em]">
+          <strong className="font-bold">{bio.company}</strong>
+          <br />
+          {bio.position}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+/** Right column of the intro: tagline and the projects button. */
+function IntroTagline() {
+  const { bio } = site;
+  return (
+    <div className="flex flex-col gap-7">
+      <p className="text-[28px] font-medium leading-[1.3] tracking-[-0.02em] min-[810px]:text-[28px] min-[1280px]:text-[30px]">
+        <Bold text={bio.tagline} />
+      </p>
+      <div>
+        <WaveLink
+          href={bio.ctaHref}
+          label={bio.cta}
+          className="inline-flex items-center gap-3 rounded-[6px] border border-ink bg-ink p-[14px] text-[16px] font-semibold leading-[1.3] tracking-[-0.02em] text-cream"
+        >
+          <svg viewBox="0 0 20 20" fill="none" className="h-5 w-5" aria-hidden>
+            <path d="M6.5 13.5l7-7M7.5 6.5h6v6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </WaveLink>
+      </div>
     </div>
   );
 }
@@ -166,33 +235,16 @@ export function HomePage({ featured }: { featured: Project[] }) {
             </div>
             <div className="mt-auto flex items-end justify-between pt-8">
               <p className="text-[68px] font-semibold leading-none tracking-[-0.02em]">{site.hero.year}</p>
-              <p className="mr-36 text-[18px] tracking-[-0.04em]">{site.hero.since}</p>
             </div>
           </section>
           <section id="bio-section" className="mx-auto h-screen w-full max-w-[1180px]">
-            <div className="grid grid-cols-[1fr_400px_1fr] items-start gap-8" style={{ marginTop: "calc(100vh - 476px)" }}>
-              <div className="flex h-[456px] flex-col justify-between">
-                <BlurWords
-                  as="h2"
-                  text={site.bio.heading}
-                  blur={10}
-                  className="text-[76px] font-semibold leading-none tracking-[-0.02em]"
-                />
-                <p className="max-w-[340px] text-[22px] font-semibold leading-[1.4] tracking-[-0.04em]">{site.bio.lead}</p>
-              </div>
-              <div className="h-[456px]" aria-hidden />
-              <div className="flex h-[456px] max-w-[360px] flex-col justify-self-end pt-[240px]">
-                {site.bio.paragraphs.map((p) => (
-                  <p key={p} className="mb-5 text-[18px] leading-[1.4] tracking-[-0.04em]">
-                    {p}
-                  </p>
-                ))}
-                <div className="mt-2">
-                  <ArrowLink href={site.getStartedHref} external>
-                    {site.bio.cta}
-                  </ArrowLink>
-                </div>
-              </div>
+            <div
+              className="grid h-[462px] grid-cols-[339px_373px_373px] items-center gap-[47.5px]"
+              style={{ marginTop: "calc(100vh - 466px)" }}
+            >
+              <IntroText />
+              <div aria-hidden />
+              <IntroTagline />
             </div>
           </section>
         </div>
@@ -227,40 +279,21 @@ export function HomePage({ featured }: { featured: Project[] }) {
           <div className="mt-8 min-[1280px]:hidden">
             <MountPortrait />
           </div>
-          <p className="mt-6 text-center text-[18px] tracking-[-0.04em] min-[1280px]:hidden">{site.hero.since}</p>
 
           <div className="hidden min-[1280px]:block min-[1280px]:flex-1" />
           <div className="mt-auto hidden items-end justify-between pt-8 min-[1280px]:flex">
             <p className="text-[68px] font-semibold leading-none tracking-[-0.02em]">{site.hero.year}</p>
-            <p className="mr-36 text-[18px] tracking-[-0.04em]">{site.hero.since}</p>
           </div>
         </section>
 
-        <section id="bio-section" className="mx-auto flex min-h-[100svh] w-full max-w-page flex-col justify-center px-5 py-24 min-[810px]:px-12">
-          <div className="grid items-center gap-10 min-[1280px]:grid-cols-[1fr_400px_1fr] min-[1280px]:gap-8">
-            <div>
-              <BlurWords
-                as="h2"
-                text={site.bio.heading}
-                blur={10}
-                className="text-[46px] font-semibold leading-none tracking-[-0.02em] min-[810px]:text-[62px] min-[1280px]:text-[76px]"
-              />
-              <p className="mt-8 max-w-[340px] text-[22px] font-semibold leading-[1.4] tracking-[-0.04em] min-[1280px]:mt-16">
-                {site.bio.lead}
-              </p>
-            </div>
-            <div className="hidden min-[1280px]:block" aria-hidden />
-            <div className="max-w-[360px] justify-self-end">
-              {site.bio.paragraphs.map((p) => (
-                <p key={p} className="mb-5 text-[18px] leading-[1.4] tracking-[-0.04em]">
-                  {p}
-                </p>
-              ))}
-              <div className="mt-2">
-                <ArrowLink href={site.getStartedHref} external>
-                  {site.bio.cta}
-                </ArrowLink>
-              </div>
+        <section id="bio-section" className="mx-auto w-full max-w-page px-5 pb-20 pt-24 min-[810px]:px-12 min-[810px]:pb-24 min-[810px]:pt-[180px]">
+          <div className="grid gap-10 min-[810px]:grid-cols-2">
+            <figure className="m-0 aspect-[342/393] w-full overflow-hidden rounded-[16px] min-[810px]:order-2 min-[810px]:self-start">
+              <img src={site.hero.portrait} alt="Portrait of Faizan" className="h-full w-full object-cover grayscale" />
+            </figure>
+            <div className="flex flex-col gap-10 min-[810px]:order-1">
+              <IntroText />
+              <IntroTagline />
             </div>
           </div>
         </section>
@@ -291,7 +324,7 @@ export function HomePage({ featured }: { featured: Project[] }) {
         </div>
       </section>
 
-      <section className="mx-auto w-full max-w-page px-5 py-24 min-[810px]:px-12 min-[1280px]:px-0">
+      <section id="projects" className="mx-auto w-full max-w-page px-5 py-24 min-[810px]:px-12 min-[1280px]:px-0">
           <div className="flex items-end justify-between gap-6">
           <h2 className="max-w-[520px] text-[46px] font-semibold leading-[1] tracking-[-0.02em] min-[810px]:text-[62px] min-[1280px]:text-[76px]">
             <BlurWords text="Featured" />
