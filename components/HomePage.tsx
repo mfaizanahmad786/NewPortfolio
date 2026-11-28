@@ -78,7 +78,7 @@ function PortraitFaces({
         style={{ rotateY: rotateFront, scale, y, filter: "grayscale(1)" }}
         className="absolute inset-0 overflow-hidden rounded-[20px] [backface-visibility:hidden] [transform-style:preserve-3d]"
       >
-        <img src={site.hero.portrait} alt="Portrait of Majd" className="h-full w-full object-cover" />
+        <img src={site.hero.portrait} alt="Portrait of Faizan" className="h-full w-full object-cover" />
       </motion.div>
     </div>
   );
@@ -125,7 +125,7 @@ function MountPortrait() {
         animate={{ rotateY: 180 }}
         transition={{ type: "spring", bounce: 0, duration: 1.6, delay: 2 }}
       >
-        <img src={site.hero.portrait} alt="Portrait of Majd" className="h-full w-full object-cover" />
+        <img src={site.hero.portrait} alt="Portrait of Faizan" className="h-full w-full object-cover" />
       </motion.div>
     </div>
   );

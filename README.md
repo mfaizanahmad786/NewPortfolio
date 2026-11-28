@@ -1,4 +1,4 @@
-# Majd — portfolio
+# Faizan — portfolio
 
 A Next.js recreation of the Framer portfolio at [majd-portfolio.framer.website](https://majd-portfolio.framer.website/).
 
