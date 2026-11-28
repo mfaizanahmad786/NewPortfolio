@@ -11,8 +11,8 @@ const linkSpring = { type: "spring" as const, bounce: 0.2, duration: 0.8 };
 const menu = [
   { label: "About Me", href: "/#bio-section" },
   { label: "Services", href: "/#services" },
-  { label: "Projects", href: "/work" },
   { label: "Experience", href: "/#experience" },
+  { label: "Projects", href: "/work" },
   { label: "Contact", href: "/#contact" },
 ];
 

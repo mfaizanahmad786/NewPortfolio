@@ -324,6 +324,8 @@ export function HomePage({ featured }: { featured: Project[] }) {
         </div>
       </section>
 
+      <Experience />
+
       <section id="projects" className="mx-auto w-full max-w-page px-5 py-24 min-[810px]:px-12 min-[1280px]:px-0">
           <div className="flex items-end justify-between gap-6">
           <h2 className="max-w-[520px] text-[46px] font-semibold leading-[1] tracking-[-0.02em] min-[810px]:text-[62px] min-[1280px]:text-[76px]">
@@ -381,8 +383,6 @@ export function HomePage({ featured }: { featured: Project[] }) {
           ))}
         </div>
       </section>
-
-      <Experience />
 
       <section id="contact" className="mx-auto grid w-full max-w-page items-start gap-12 px-5 py-20 min-[810px]:px-12 min-[1280px]:grid-cols-[minmax(0,640px)_minmax(0,484px)] min-[1280px]:justify-between min-[1280px]:px-0 min-[1280px]:py-28">
         <div className="flex min-h-[280px] flex-col min-[1280px]:min-h-[455px]">
