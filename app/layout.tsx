@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { site } from "@/data/site";
-import { Chrome } from "@/components/Chrome";
 import { Footer } from "@/components/Footer";
 import { Nav } from "@/components/Nav";
 import { SmoothScroll } from "@/components/SmoothScroll";
@@ -38,7 +37,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Nav />
         {children}
         <Footer />
-        <Chrome />
       </body>
     </html>
   );
