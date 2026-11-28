@@ -22,9 +22,9 @@ const EST_TILE = 175; // rough tile width + gap, only used to decide how many ti
 
 type Tile = { item: StackItem; key: string; first: boolean };
 
-type Tint = { logo: string; tint: string; edge: string; glow: string };
+type Tint = { logo: string; tint: string; edge: string; glow: string; tip: string };
 
-const NEUTRAL: Tint = { logo: "#111111", tint: "rgba(17,17,17,0.07)", edge: "rgba(17,17,17,0.4)", glow: "rgba(17,17,17,0.25)" };
+const NEUTRAL: Tint = { logo: "#111111", tint: "rgba(17,17,17,0.07)", edge: "rgba(17,17,17,0.4)", glow: "rgba(17,17,17,0.25)", tip: "#faf7f3" };
 
 /**
  * Hover colours from a brand hex: logo, ~10% tint, ~40% border, ~25% glow. Black or grey brands
@@ -39,11 +39,17 @@ function brandTint(hex?: string): Tint {
   const lum = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
   const k = lum > 0.7 ? 0.7 : 1;
   const [dr, dg, db] = [Math.round(r * k), Math.round(g * k), Math.round(b * k)];
+  // Project names sit on the dark tooltip: lift a dark brand colour so it stays readable, and
+  // use cream for near-black brands (which would otherwise disappear on ink).
+  const tipLum = lum * k;
+  const lift = tipLum < 0.45 ? (0.62 - tipLum) / (1 - tipLum) : 0;
+  const [tr, tg, tb] = [Math.round(dr + (255 - dr) * lift), Math.round(dg + (255 - dg) * lift), Math.round(db + (255 - db) * lift)];
   return {
     logo: `rgb(${dr} ${dg} ${db})`,
     tint: `rgba(${r},${g},${b},0.1)`,
     edge: `rgba(${dr},${dg},${db},0.4)`,
     glow: `rgba(${r},${g},${b},0.25)`,
+    tip: `rgb(${tr} ${tg} ${tb})`,
   };
 }
 
@@ -53,7 +59,7 @@ function TileView({ item, interactive }: { item: StackItem; interactive: boolean
   return (
     <li
       className="marquee-tile group relative shrink-0"
-      style={{ ["--logo" as string]: c.logo, ["--tint" as string]: c.tint, ["--edge" as string]: c.edge, ["--glow" as string]: c.glow }}
+      style={{ ["--logo" as string]: c.logo, ["--tint" as string]: c.tint, ["--edge" as string]: c.edge, ["--glow" as string]: c.glow, ["--tip" as string]: c.tip }}
       tabIndex={interactive ? 0 : undefined}
       aria-hidden={interactive ? undefined : true}
     >
@@ -69,10 +75,17 @@ function TileView({ item, interactive }: { item: StackItem; interactive: boolean
         )}
         <span className="whitespace-nowrap">{item.name}</span>
       </span>
-      {item.use && (
+      {(item.projects?.length || item.use) && (
         <span role="tooltip" className="marquee-tip" aria-hidden={interactive ? undefined : true}>
-          <strong>{item.name}</strong>
-          <span>{item.use}</span>
+          {item.projects?.length ? (
+            <>
+              <em className="marquee-tip-label">Used in</em>
+              <strong className="marquee-tip-projects">{item.projects.slice(0, 2).join(" · ")}</strong>
+            </>
+          ) : (
+            <strong className="marquee-tip-name">{item.name}</strong>
+          )}
+          {item.use && <span className="marquee-tip-use">{item.use}</span>}
         </span>
       )}
     </li>

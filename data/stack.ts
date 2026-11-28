@@ -2,7 +2,8 @@
  * Tech Stack content. Edit this file to change the section: heading, groups, items and marquee rows.
  *
  * - `icon` is a key into data/stack-icons.ts (generated from simple-icons). Leave it out for a text tile.
- * - `use` is the one-line description shown in the marquee tooltip.
+ * - `projects` is where the tool was used (up to two names). Shown prominently in the tooltip.
+ * - `use` is the short supporting line under the project name.
  * - `marquee.rows` groups the categories into scrolling rows for the logo marquee.
  * - `size` / `blurb` are only used by the bento-grid version (branch `tech-stack`, tag
  *   `tech-stack-bento`); the marquee ignores them.
@@ -14,7 +15,9 @@
 export type StackItem = {
   name: string;
   icon?: string;
-  /** One short line on what it is used for (tooltip in the marquee). */
+  /** Up to two project or product names, shown first in the tooltip. */
+  projects?: string[];
+  /** Short supporting line under the project name (tooltip). */
   use?: string;
 };
 
@@ -67,8 +70,18 @@ export const stack = {
         { name: "Node.js", icon: "nodedotjs", use: "APIs and services behind my web apps." },
         { name: "Express", icon: "express", use: "Lightweight REST backends." },
         { name: "PostgreSQL", icon: "postgresql", use: "Relational data and SQL." },
-        { name: "MongoDB", icon: "mongodb", use: "Aggregation pipelines & ACID transactions (Itwaar Bazaar)." },
-        { name: "Prisma", icon: "prisma", use: "Type-safe database access (YC Directory)." },
+        {
+          name: "MongoDB",
+          icon: "mongodb",
+          projects: ["Itwaar Bazaar"],
+          use: "Aggregation pipelines & ACID transactions.",
+        },
+        {
+          name: "Prisma",
+          icon: "prisma",
+          projects: ["YC Directory"],
+          use: "Type-safe database access.",
+        },
         { name: "Python", icon: "python", use: "Backend scripts, data work and AI glue." },
       ],
     },
@@ -78,7 +91,12 @@ export const stack = {
       blurb: "One codebase, iOS and Android.",
       size: "sm",
       items: [
-        { name: "Flutter", icon: "flutter", use: "Kharcha & QuestHabit apps." },
+        {
+          name: "Flutter",
+          icon: "flutter",
+          projects: ["Kharcha", "QuestHabit"],
+          use: "Cross-platform apps for iOS and Android.",
+        },
         { name: "React Native", icon: "react", use: "Cross-platform mobile apps for iOS and Android." },
       ],
     },
@@ -98,8 +116,18 @@ export const stack = {
       blurb: "Models and agents.",
       size: "xl",
       items: [
-        { name: "Gemini", icon: "googlegemini", use: "AI resume analysis (Resumind) & crop advice (Anaaj)." },
-        { name: "Claude", icon: "anthropic", use: "Custom skills, plugins and multi-agent workflows." },
+        {
+          name: "Gemini",
+          icon: "googlegemini",
+          projects: ["Resumind", "Anaaj"],
+          use: "AI resume analysis and crop advice.",
+        },
+        {
+          name: "Claude",
+          icon: "anthropic",
+          projects: ["Taleemabad"],
+          use: "Custom skills, plugins and multi-agent workflows.",
+        },
       ],
     },
   ] satisfies StackGroup[],
