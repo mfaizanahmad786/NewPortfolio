@@ -7,6 +7,8 @@ const config: Config = {
       colors: {
         cream: "#faf7f3",
         ink: "#111111",
+        accent: "var(--accent)",
+        "accent-deep": "var(--accent-deep)",
       },
       fontFamily: {
         sans: ["var(--font-archivo)", "Archivo", "sans-serif"],

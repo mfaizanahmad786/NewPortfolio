@@ -54,8 +54,8 @@ function Stop({
     >
       <span
         ref={markerRef}
-        className={`journey-marker grid h-[38px] w-[38px] place-items-center rounded-full border border-ink min-[1001px]:mx-auto min-[1001px]:mb-9 ${
-          now ? "bg-ink" : "bg-cream"
+        className={`journey-marker grid h-[38px] w-[38px] place-items-center rounded-full border min-[1001px]:mx-auto min-[1001px]:mb-9 ${
+          now ? "border-accent bg-accent" : "border-ink bg-cream"
         }`}
         data-now={now ? "true" : undefined}
         aria-hidden="true"
@@ -71,7 +71,7 @@ function Stop({
       >
         <p className="mb-4 flex min-h-7 flex-wrap items-center gap-2 text-[13px] leading-[1.5] text-ink/60 min-[1001px]:mb-[18px] min-[1001px]:gap-3">
           {entry.badge ? (
-            <span className="rounded-[4px] bg-ink px-[9px] py-1.5 text-[11px] font-medium leading-[1.4] text-cream">
+            <span className={`rounded-[4px] px-[9px] ${now ? "bg-accent" : "bg-ink"} py-1.5 text-[11px] font-medium leading-[1.4] text-cream`}>
               {entry.badge}
             </span>
           ) : null}
