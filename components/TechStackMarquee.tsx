@@ -17,10 +17,10 @@ import { Reveal } from "./Reveal";
  */
 
 const SLOW = 0.12; // playbackRate while a row is hovered
-const MIN_GROUP_WIDTH = 2700; // one copy must be wider than any realistic viewport so the loop never shows a gap
+const MIN_GROUP_WIDTH = 3600; // one copy must be wider than any realistic viewport so the loop never shows a gap
 const EST_TILE = 175; // rough tile width + gap, only used to decide how many times to repeat a row's items
 
-type Tile = { item: StackItem; key: string };
+type Tile = { item: StackItem; key: string; first: boolean };
 
 type Tint = { logo: string; tint: string; edge: string; glow: string };
 
@@ -89,7 +89,7 @@ function MarqueeRowView({ row, items, reduced }: { row: MarqueeRow; items: Stack
 
   const repeats = Math.max(1, Math.ceil(MIN_GROUP_WIDTH / (items.length * EST_TILE)));
   const tiles = useMemo<Tile[]>(
-    () => Array.from({ length: repeats }, (_, r) => items.map((item) => ({ item, key: `${r}-${item.name}` }))).flat(),
+    () => Array.from({ length: repeats }, (_, r) => items.map((item) => ({ item, key: `${r}-${item.name}`, first: r === 0 }))).flat(),
     [items, repeats],
   );
 
@@ -158,16 +158,16 @@ function MarqueeRowView({ row, items, reduced }: { row: MarqueeRow; items: Stack
     raf.current = requestAnimationFrame(step);
   };
 
-  const label = (
+  const label = row.label ? (
     <p className="m-0 mb-3 px-5 text-[13px] font-medium uppercase leading-none tracking-[0.08em] text-ink/45 min-[810px]:px-12 min-[1280px]:mx-auto min-[1280px]:max-w-page min-[1280px]:px-0">
       {row.label}
     </p>
-  );
+  ) : null;
 
   if (reduced) {
     return (
       <div className="mx-auto w-full max-w-page px-5 min-[810px]:px-12 min-[1280px]:px-0">
-        <p className="m-0 mb-3 text-[13px] font-medium uppercase leading-none tracking-[0.08em] text-ink/45">{row.label}</p>
+        {row.label && <p className="m-0 mb-3 text-[13px] font-medium uppercase leading-none tracking-[0.08em] text-ink/45">{row.label}</p>}
         <ul className="m-0 flex list-none flex-wrap gap-3 p-0">
           {items.map((item) => (
             <TileView key={item.name} item={item} interactive />
@@ -190,7 +190,7 @@ function MarqueeRowView({ row, items, reduced }: { row: MarqueeRow; items: Stack
       >
         <ul ref={track} className="marquee-track m-0 flex w-max list-none gap-3 p-0 py-1 min-[810px]:gap-4">
           {[0, 1].map((copy) =>
-            tiles.map(({ item, key }) => <TileView key={`${copy}-${key}`} item={item} interactive={copy === 0} />),
+            tiles.map(({ item, key, first }) => <TileView key={`${copy}-${key}`} item={item} interactive={copy === 0 && first} />),
           )}
         </ul>
         <span className="marquee-fade marquee-fade-l" aria-hidden="true" />
@@ -228,13 +228,16 @@ export function TechStackMarquee() {
         </div>
       </div>
 
-      <div className="mt-12 flex flex-col gap-9 overflow-x-clip min-[701px]:mt-16 min-[701px]:gap-11">
+      <div className="mt-12 flex flex-col gap-9 overflow-x-clip min-[701px]:mt-16">
         {rows.map(({ row, items }, i) => (
-          <Reveal key={row.label} delay={0.08 * i}>
+          <Reveal key={row.groups.join("-")} delay={0.08 * i}>
             <MarqueeRowView row={row} items={items} reduced={reduced} />
           </Reveal>
         ))}
       </div>
+      <p className="mx-auto m-0 mt-8 w-full max-w-page px-5 text-[15px] leading-normal tracking-[-0.01em] text-ink/45 min-[810px]:px-12 min-[1280px]:px-0">
+        {stack.marquee.note}
+      </p>
     </section>
   );
 }
