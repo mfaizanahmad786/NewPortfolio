@@ -37,6 +37,7 @@ export const site = {
     currentLabel: "Currently at",
     company: "Saak Remit",
     position: "Software Engineer",
+    location: "Remote, UK",
     // **double asterisks** mark the bold phrases.
     tagline:
       "I build **scalable software** and **AI-powered tools** that turn complex workflows into simple, reliable products.",

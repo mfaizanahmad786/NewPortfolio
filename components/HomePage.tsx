@@ -171,6 +171,8 @@ function IntroText() {
           <strong className="font-bold">{bio.company}</strong>
           <br />
           {bio.position}
+          <br />
+          <span className="font-normal text-ink/50">{bio.location}</span>
         </p>
       </div>
     </div>
