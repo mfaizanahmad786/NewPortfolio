@@ -55,11 +55,3 @@ export function SocialIcon({ name }: { name: string }) {
     </svg>
   );
 }
-
-export function FramerMark() {
-  return (
-    <svg viewBox="0 0 16 24" className="h-3.5 w-3" aria-hidden>
-      <path fill="currentColor" d="M0 0h16v8H8L0 0Zm0 8h8l8 8H8v8L0 16V8Z" />
-    </svg>
-  );
-}

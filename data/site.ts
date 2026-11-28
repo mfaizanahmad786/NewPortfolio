@@ -11,9 +11,6 @@ export const site = {
     "Faizan is a Software Engineer at Saak Remit, building scalable software and AI-powered tools.",
   email: "mfaizanahmad009@gmail.com",
   emailHref: "mailto:mfaizanahmad009@gmail.com",
-  useForFreeHref: "https://framer.link/bsFvFjY",
-  moreTemplatesHref: "https://framer.link/5Wi1vkP",
-  framerHref: "https://www.framer.com",
   socials: [
     { label: "X", href: "https://x.com/" },
     { label: "Instagram", href: "https://www.instagram.com/" },
