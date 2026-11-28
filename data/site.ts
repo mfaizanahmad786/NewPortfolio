@@ -44,8 +44,6 @@ export const site = {
     cta: "Explore projects",
     ctaHref: "/#projects",
   },
-  quote:
-    "From idea to launch. Clean, scalable digital products built to move fast, stay simple, and perform in real-world use, driven by clarity, structured systems, and intentional design.",
   services: {
     heading: "Services",
     items: [
