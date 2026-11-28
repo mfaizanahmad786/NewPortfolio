@@ -426,3 +426,112 @@ button {
     animation: none;
   }
 }
+
+/* ---------------------------------------------------------------- Tech Stack marquee */
+.marquee-row {
+  overflow-x: clip;
+  overflow-y: visible;
+  padding-top: 4px;
+}
+.marquee-row:hover {
+  z-index: 5;
+}
+.marquee-track {
+  will-change: transform;
+  backface-visibility: hidden;
+}
+.marquee-tile {
+  color: #111;
+  list-style: none;
+  outline: none;
+}
+.marquee-tile-face {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.25s ease, background-color 0.25s ease,
+    box-shadow 0.35s ease;
+}
+.marquee-icon {
+  transition: color 0.25s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.marquee-tile:hover,
+.marquee-tile:focus-visible {
+  z-index: 3;
+}
+.marquee-tile:hover .marquee-tile-face,
+.marquee-tile:focus-visible .marquee-tile-face {
+  transform: translateY(-5px);
+  border-color: var(--brand);
+  background-color: #fff;
+  box-shadow: 0 16px 28px -14px rgb(107 69 214 / 0.55), 0 2px 6px -2px rgb(17 17 17 / 0.12);
+}
+.marquee-tile:hover .marquee-icon,
+.marquee-tile:focus-visible .marquee-icon {
+  color: var(--brand);
+  transform: scale(1.12) rotate(-5deg);
+}
+.marquee-tile:focus-visible .marquee-tile-face {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+.marquee-tip {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  display: flex;
+  width: max-content;
+  max-width: 230px;
+  flex-direction: column;
+  gap: 3px;
+  padding: 9px 12px 10px;
+  border-radius: 12px;
+  background: #111;
+  color: #faf7f3;
+  font-size: 13px;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  text-align: left;
+  white-space: normal;
+  opacity: 0;
+  transform: translate(-50%, 6px);
+  transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+.marquee-tip strong {
+  font-size: 13.5px;
+  font-weight: 600;
+}
+.marquee-tip span {
+  color: rgb(250 247 243 / 0.7);
+}
+.marquee-tip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  margin-top: -5px;
+  background: #111;
+  transform: translateX(-50%) rotate(45deg);
+  border-radius: 2px;
+}
+.marquee-tile:hover .marquee-tip,
+.marquee-tile:focus-visible .marquee-tip {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+.marquee-fade {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 2;
+  width: clamp(40px, 12vw, 200px);
+  pointer-events: none;
+}
+.marquee-fade-l {
+  left: 0;
+  background: linear-gradient(to right, #faf7f3 8%, rgb(250 247 243 / 0));
+}
+.marquee-fade-r {
+  right: 0;
+  background: linear-gradient(to left, #faf7f3 8%, rgb(250 247 243 / 0));
+}
