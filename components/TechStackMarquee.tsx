@@ -22,19 +22,38 @@ const EST_TILE = 175; // rough tile width + gap, only used to decide how many ti
 
 type Tile = { item: StackItem; key: string };
 
-/** Brands whose colour is basically black fall back to the purple accent on hover. */
-function hoverColour(hex: string) {
+type Tint = { logo: string; tint: string; edge: string; glow: string };
+
+const NEUTRAL: Tint = { logo: "#111111", tint: "rgba(17,17,17,0.07)", edge: "rgba(17,17,17,0.4)", glow: "rgba(17,17,17,0.25)" };
+
+/**
+ * Hover colours from a brand hex: logo, ~10% tint, ~40% border, ~25% glow. Black or grey brands
+ * (Next.js, Vercel, GitHub, ...) get a neutral ink tint; very light ones (JavaScript yellow) keep
+ * their tint but get a darker logo and border so they stay readable on cream.
+ */
+function brandTint(hex?: string): Tint {
+  if (!hex) return NEUTRAL;
   const n = parseInt(hex.slice(1), 16);
-  const lum = (0.2126 * ((n >> 16) & 255) + 0.7152 * ((n >> 8) & 255) + 0.0722 * (n & 255)) / 255;
-  return lum < 0.2 ? "var(--accent)" : hex;
+  const [r, g, b] = [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+  if (Math.max(r, g, b) - Math.min(r, g, b) <= 30) return NEUTRAL;
+  const lum = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+  const k = lum > 0.7 ? 0.7 : 1;
+  const [dr, dg, db] = [Math.round(r * k), Math.round(g * k), Math.round(b * k)];
+  return {
+    logo: `rgb(${dr} ${dg} ${db})`,
+    tint: `rgba(${r},${g},${b},0.1)`,
+    edge: `rgba(${dr},${dg},${db},0.4)`,
+    glow: `rgba(${r},${g},${b},0.25)`,
+  };
 }
 
 function TileView({ item, interactive }: { item: StackItem; interactive: boolean }) {
   const icon = item.icon ? brandIcons[item.icon] : undefined;
+  const c = brandTint(icon?.hex);
   return (
     <li
       className="marquee-tile group relative shrink-0"
-      style={{ ["--brand" as string]: icon ? hoverColour(icon.hex) : "var(--accent)" }}
+      style={{ ["--logo" as string]: c.logo, ["--tint" as string]: c.tint, ["--edge" as string]: c.edge, ["--glow" as string]: c.glow }}
       tabIndex={interactive ? 0 : undefined}
       aria-hidden={interactive ? undefined : true}
     >

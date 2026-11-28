@@ -446,6 +446,7 @@ button {
   outline: none;
 }
 .marquee-tile-face {
+  box-shadow: inset 0 0 0 999px transparent, 0 0 0 0 transparent;
   transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.25s ease, background-color 0.25s ease,
     box-shadow 0.35s ease;
 }
@@ -459,17 +460,17 @@ button {
 .marquee-tile:hover .marquee-tile-face,
 .marquee-tile:focus-visible .marquee-tile-face {
   transform: translateY(-5px);
-  border-color: var(--brand);
+  border-color: var(--edge);
   background-color: #fff;
-  box-shadow: 0 16px 28px -14px rgb(107 69 214 / 0.55), 0 2px 6px -2px rgb(17 17 17 / 0.12);
+  box-shadow: inset 0 0 0 999px var(--tint), 0 14px 20px -6px var(--glow), 0 2px 6px -2px rgb(17 17 17 / 0.1);
 }
 .marquee-tile:hover .marquee-icon,
 .marquee-tile:focus-visible .marquee-icon {
-  color: var(--brand);
+  color: var(--logo);
   transform: scale(1.12) rotate(-5deg);
 }
 .marquee-tile:focus-visible .marquee-tile-face {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--logo);
   outline-offset: 3px;
 }
 .marquee-tip {
