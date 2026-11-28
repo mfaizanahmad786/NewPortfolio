@@ -41,7 +41,7 @@ export function Nav() {
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
             onClick={() => setOpen((value) => !value)}
-            className="grid h-11 w-11 place-items-center rounded-[12px] bg-cream text-ink"
+            className="grid h-11 w-11 place-items-center rounded-[12px] bg-cream text-ink transition-colors hover:bg-accent hover:text-cream"
           >
             {open ? <CloseIcon /> : <DotsIcon />}
           </button>
@@ -66,7 +66,7 @@ export function Nav() {
                   <Link
                     href={item.href}
                     onClick={() => setOpen(false)}
-                    className="inline-flex rounded-[8px] bg-cream px-3 py-1.5 text-[15px] tracking-[-0.03em] text-ink transition-colors hover:bg-white"
+                    className="inline-flex rounded-[8px] bg-cream px-3 py-1.5 text-[15px] tracking-[-0.03em] text-ink transition-colors hover:bg-accent hover:text-cream"
                   >
                     {item.label}
                   </Link>

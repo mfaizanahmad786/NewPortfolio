@@ -152,8 +152,8 @@ function IntroText() {
   return (
     <div className="flex flex-col gap-6 min-[1280px]:gap-8">
       <h2 className="text-[56px] font-bold leading-[0.98] tracking-[-0.04em] min-[810px]:text-[72px] min-[1280px]:text-[88px]">
-        {bio.greeting.map((line) => (
-          <span key={line} className="block whitespace-nowrap">
+        {bio.greeting.map((line, i) => (
+          <span key={line} className={`block whitespace-nowrap ${i === bio.greeting.length - 1 ? "text-accent" : ""}`}>
             {line}
           </span>
         ))}
@@ -189,7 +189,7 @@ function IntroTagline() {
         <WaveLink
           href={bio.ctaHref}
           label={bio.cta}
-          className="inline-flex items-center gap-3 rounded-[6px] border border-ink bg-ink p-[14px] text-[16px] font-semibold leading-[1.3] tracking-[-0.02em] text-cream"
+          className="inline-flex items-center gap-3 rounded-[6px] border border-ink bg-ink p-[14px] text-[16px] font-semibold leading-[1.3] tracking-[-0.02em] text-cream transition-colors duration-200 hover:border-accent hover:bg-accent"
         >
           <svg viewBox="0 0 20 20" fill="none" className="h-5 w-5" aria-hidden>
             <path d="M6.5 13.5l7-7M7.5 6.5h6v6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
@@ -400,7 +400,7 @@ export function HomePage({ featured }: { featured: Project[] }) {
                 target="_blank"
                 rel="noreferrer"
                 aria-label={social.label}
-                className="grid h-10 w-10 place-items-center rounded-[8px] bg-ink/10 text-ink transition-colors hover:bg-ink hover:text-cream"
+                className="grid h-10 w-10 place-items-center rounded-[8px] bg-ink/10 text-ink transition-colors hover:bg-accent hover:text-cream"
               >
                 <SocialIcon name={social.label} />
               </a>
@@ -444,7 +444,7 @@ export function HomePage({ featured }: { featured: Project[] }) {
           </label>
           <button
             type="submit"
-            className="mt-4 h-11 w-full rounded-[8px] bg-cream text-[16px] tracking-[-0.02em] text-ink transition-colors hover:bg-white"
+            className="mt-4 h-11 w-full rounded-[8px] bg-cream text-[16px] tracking-[-0.02em] text-ink transition-colors hover:bg-accent hover:text-cream"
           >
             {sent ? "Sent" : site.contact.fields.submit}
           </button>

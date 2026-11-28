@@ -6,6 +6,11 @@
   color-scheme: light;
   --cream: #faf7f3;
   --ink: #111111;
+  /* Purple accent: change these two lines to re-tint the whole site.
+     --accent is #6b45d6 (5.7:1 on cream, 6.1:1 under white/cream text: AA for normal text).
+     --accent-deep is #5b38c8 (6.9:1 on cream) for pressed/darker states. */
+  --accent: #6b45d6;
+  --accent-deep: #5b38c8;
 }
 
 @keyframes page-enter {
@@ -38,8 +43,13 @@ body {
 }
 
 ::selection {
-  background: #111;
+  background: var(--accent);
   color: #faf7f3;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
 }
 
 input,
@@ -386,7 +396,7 @@ button {
   stroke-dasharray: 3 7;
 }
 .journey-road-ink {
-  stroke: #111;
+  stroke: var(--accent);
   stroke-width: 1.5px;
   stroke-dasharray: 1;
   stroke-dashoffset: 1px;

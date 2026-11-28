@@ -25,8 +25,8 @@ export function ArrowLink({
       <span
         className={`grid h-7 w-7 place-items-center rounded-[8px] border transition-colors duration-200 ${
           dark
-            ? "border-ink text-ink group-hover:bg-ink group-hover:text-cream"
-            : "border-cream text-cream group-hover:bg-cream group-hover:text-ink"
+            ? "border-ink text-ink group-hover:border-accent group-hover:bg-accent group-hover:text-cream"
+            : "border-cream text-cream group-hover:border-accent group-hover:bg-accent group-hover:text-cream"
         }`}
       >
         <ArrowIcon />
