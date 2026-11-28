@@ -4,11 +4,13 @@ import * as si from "simple-icons";
 import { writeFileSync } from "node:fs";
 
 const wanted = [
-  "Nextdotjs", "React", "Typescript", "Tailwindcss", "Framer",
-  "Nodedotjs", "Python", "Fastapi", "Express",
-  "Anthropic", "Modelcontextprotocol",
-  "Postgresql", "Mongodb", "Redis",
-  "Vercel", "Docker", "Git", "Github",
+  "Nextdotjs", "React", "Typescript", "Javascript", "Tailwindcss", "Shadcnui", "Framer",
+  "Nodedotjs", "Express", "Prisma", "Jsonwebtokens",
+  "Mongodb", "Postgresql", "Sqlite", "Pandas", "Numpy", "Python",
+  "Googlegemini", "Anthropic", "Modelcontextprotocol",
+  "Flutter", "Dart",
+  "Firebase", "Vercel", "Git", "Github",
+  "Cplusplus", "Openjdk",
 ];
 
 const rows = wanted.map((name) => {
