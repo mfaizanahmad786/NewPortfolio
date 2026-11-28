@@ -8,10 +8,9 @@ export const site = {
   name: "Faizan",
   title: "Faizan",
   description:
-    "Faizan is a software engineer and Framer creator building modern, scalable, conversion-driven web experiences.",
-  email: "Mejed@Templyo.io",
-  emailHref: "mailto:mejed@templyo.io",
-  getStartedHref: "https://framer.link/nnhGcWR",
+    "Faizan is a Software Engineer at Saak Remit, building scalable software and AI-powered tools.",
+  email: "mfaizanahmad009@gmail.com",
+  emailHref: "mailto:mfaizanahmad009@gmail.com",
   useForFreeHref: "https://framer.link/bsFvFjY",
   moreTemplatesHref: "https://framer.link/5Wi1vkP",
   framerHref: "https://www.framer.com",
@@ -31,19 +30,21 @@ export const site = {
   hero: {
     title: ["SOFTWARE", "ENGINEER"],
     year: "©2026",
-    since: "/CREATING SINCE 2020",
     portrait: "/media/haSjyjpt7FyCjJUBvXtmzCMSEQg.png",
     star: "/media/OLDYsHB9RMavvQrkVRNy08ZXYE.png",
     bolt: "/media/lIIjRX5gxRdY7UWw5wqIXicPOA.png",
   },
   bio: {
-    heading: "Hey!",
-    lead: "I’m Faizan, a builder based in Syria, currently working on Templyo, a platform for high-quality Framer templates.",
-    paragraphs: [
-      "I’m a software engineer and Framer creator with a strong focus on building modern, scalable, and conversion-driven web experiences.",
-      "Over the years, I’ve created and shipped multiple SaaS products and Framer templates used by global customers, helping them launch faster.",
-    ],
-    cta: "Get Started",
+    greeting: ["Hi, I’m", "Faizan."],
+    role: "AI Engineer & Full-Stack Developer.",
+    currentLabel: "Currently at",
+    company: "Saak Remit",
+    position: "Software Engineer",
+    // **double asterisks** mark the bold phrases.
+    tagline:
+      "I build **scalable software** and **AI-powered tools** that turn complex workflows into simple, reliable products.",
+    cta: "Explore projects",
+    ctaHref: "/#projects",
   },
   quote:
     "From idea to launch. Clean, scalable digital products built to move fast, stay simple, and perform in real-world use, driven by clarity, structured systems, and intentional design.",
@@ -121,7 +122,7 @@ export const site = {
     },
   },
   footer: {
-    role: ["Software Engineer &", "Framer Creator."],
+    role: ["AI Engineer &", "Full-Stack Developer."],
     explore: "Explore",
     getInTouch: "Get in touch",
     copyrightName: "Muhammad Faizan Ahmad",
