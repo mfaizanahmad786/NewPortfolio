@@ -6,11 +6,12 @@
   color-scheme: light;
   --cream: #faf7f3;
   --ink: #111111;
-  /* Purple accent: change these two lines to re-tint the whole site.
-     --accent is #6b45d6 (5.7:1 on cream, 6.1:1 under white/cream text: AA for normal text).
-     --accent-deep is #5b38c8 (6.9:1 on cream) for pressed/darker states. */
-  --accent: #6b45d6;
-  --accent-deep: #5b38c8;
+  /* Emerald accent: change these two lines to re-tint the whole site.
+     --accent is #0f9d6e (3.2:1 on cream, AA for large text such as "Faizan.").
+     --accent-deep is #0b7a55 (5.0:1 on cream, 5.3:1 under white/cream text: AA for
+     normal text) for pressed/darker states and text selection. */
+  --accent: #0f9d6e;
+  --accent-deep: #0b7a55;
 }
 
 @keyframes page-enter {
@@ -43,7 +44,7 @@ body {
 }
 
 ::selection {
-  background: var(--accent);
+  background: var(--accent-deep);
   color: #faf7f3;
 }
 

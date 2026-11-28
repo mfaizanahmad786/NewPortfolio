@@ -1,4 +1,4 @@
-"""Recolour the yellow sneakers on the footer character to the site accent purple.
+"""Recolour the yellow sneakers on the footer character to the site accent emerald.
 
 Usage: python3 scripts/recolor-character-shoes.py <character.png|webp> [out.png|webp]
 
@@ -7,7 +7,7 @@ outside the sneakers stays exactly as it was; a .webp output is written lossless
 
 Only the yellow connected regions in the feet (bottom of the figure) are touched. Hue is moved
 to the accent hue and saturation/value are scaled so the base yellow lands on the accent colour
-(#6b45d6) while shadows and highlights keep their relative shading. Alpha is never modified.
+(#0f9d6e) while shadows and highlights keep their relative shading. Alpha is never modified.
 """
 import colorsys
 import sys
@@ -17,7 +17,7 @@ import numpy as np
 from PIL import Image
 from scipy import ndimage
 
-ACCENT = "#6b45d6"
+ACCENT = "#0f9d6e"
 src = Path(sys.argv[1])
 dst = Path(sys.argv[2]) if len(sys.argv) > 2 else src
 

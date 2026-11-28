@@ -135,7 +135,7 @@ export const site = {
     backToTop: "Back to top",
     caption: "Finally, some traffic on my website.",
     crowdDescription:
-      "45 illustrated pedestrians in black-and-white ink, students, workers and older people in casual clothes and shalwar kameez, walk past in two rows. Faizan stands still among them in a black shirt, loose black trousers and purple sneakers. People pass in front of him.",
+      "45 illustrated pedestrians in black-and-white ink, students, workers and older people in casual clothes and shalwar kameez, walk past in two rows. Faizan stands still among them in a black shirt, loose black trousers and emerald sneakers. People pass in front of him.",
   },
   workPage: {
     title: "My Brightest Creations",
