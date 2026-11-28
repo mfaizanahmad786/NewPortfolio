@@ -50,17 +50,24 @@ export const site = {
     heading: "Services",
     items: [
       {
-        title: "Website Migration",
-        tags: ["Web Migration", "Optimization", "Framer Rebuild"],
-      },
-      { title: "Framer Templates", tags: ["Startup", "Agency", "SaaS"] },
-      {
-        title: "Frontend Development",
-        tags: ["UI Dev", "Responsive Layouts", "Web Performance"],
+        title: "Website Development",
+        description: "Fast, polished websites and web apps built in Next.js, from freelance builds to Speed Speak.",
+        tags: ["Next.js", "Web Apps", "Performance"],
       },
       {
-        title: "Product Consulting",
-        tags: ["Product Direction", "Web Strategy", "Technical Guidance"],
+        title: "Enterprise Software Development",
+        description: "Internal tools and fintech platforms, like the digital wallet and remittance app at Saak Remit.",
+        tags: ["Internal Tools", "Fintech", "Remittance"],
+      },
+      {
+        title: "E-commerce Solutions",
+        description: "Storefronts with secure payments and a checkout that makes buying effortless.",
+        tags: ["Storefronts", "Payments", "Checkout"],
+      },
+      {
+        title: "AI-Native Software",
+        description: "Multi-agent workflows, custom Claude skills and MCP integrations that do real work.",
+        tags: ["Multi-Agent", "Claude Skills", "MCP"],
       },
     ],
   },
